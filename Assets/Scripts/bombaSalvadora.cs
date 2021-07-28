@@ -12,5 +12,10 @@ public class bombaSalvadora : MonoBehaviour
             gameObject.SetActive(false);
 
         }
+        else if (collision.gameObject.CompareTag("piso"))
+        {
+            gameObject.GetComponent<Rigidbody>().isKinematic = true;
+        }
+        
     }
 }

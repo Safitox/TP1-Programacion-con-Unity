@@ -58,7 +58,7 @@ public class MecaShrek : MonoBehaviour
         Boca.SetTrigger("hablar");
         GetComponent<AudioSource>().PlayOneShot(sndBurro);
         Invoke("ActivarLaser", 5f);
-        Invoke("Burro", 20f);
+        Invoke("Burro", 23f);
     }
 
 

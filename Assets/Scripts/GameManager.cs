@@ -182,9 +182,10 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public void PASEDENIVEL()
+    public void PASEDENIVEL(int overrider=0)
     {
-        
+        if (overrider != 0)
+            EscenaActual = overrider-1;
         SceneManager.LoadScene(Escenas[EscenaActual],LoadSceneMode.Single);
         if (EscenaActual!=0)
             GetComponent<AudioSource>().PlayOneShot(sndJugadorFesteja, 1);
