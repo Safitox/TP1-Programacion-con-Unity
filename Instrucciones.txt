@@ -1,0 +1,22 @@
+NIVEL 1:
+Enemigos: Robots. Salen de spawners distribuidos en el suelo, se activan y disparan hacia la posición actual del jugador. Al morir, explotan y se dividen en piezas. La cabeza es explosiva y se detona un cierto tiempo después de morir. La mayoría de las veces la detonación de la cabeza ocurre alrededor de un segundo después de la muerte. Con menos frecuencia algunas cabezas tardan varios segundos en detonar.
+El jugador tiene que destruir los robots cerca de los spawners o arrojar las cabezas explosivas hacia los spawners para destruirlos.
+Al destruir todos los spawners se abre una puerta que habilita la salida del nivel.
+
+NIVEL 2:
+Hay un enorme dispenser rotando en el nivel que cada cierto tiempo suelta una bomba. La bomba persigue al jugador y si se acerca lo suficiente estalla. El jugador puede disparar a las bombas para destruirlas antes de ser alcanzado.
+Sobre algunas plataformas hay algunos robots disparando al jugador. Estos robots son indestructibles.
+La última carga del dispenser es una bola verde brillante. El nivel termina cuando el jugador agarra este objeto, activa la salida y se dirije a ella.
+
+NIVEL 3:
+El piso del nivel es de lava y va ascendiendo. el jugador tiene que saltar por plataformas hasta llegar a la salida. Spawnean drones que disparan al jugador.
+
+NIVEL 4:
+El jugador tiene que derrotar a MecaShrek.El boss orbita sobre el nivel y ocasionalmente dispara rayos de sus ojos hacia el jugador.
+El jugador en este nivel puede lanzar misiles con la tecla E.
+La idea es destruir las orejas de MecaShrek a cañonazos.
+MecaShreck va soltando bombas explosivas que al ser destruidas sueltan recargas de misiles.
+
+
+EL JUGADOR TIENE 3 VIDAS EN TOTAL PARA TODA LA PARTIDA.
+CON LA TECLA "+" SE PUEDEN SALTEAR NIVELES

@@ -1,0 +1,8 @@
+newmtl mat21_1
+Kd 0.5 0.4646226 0.4646226
+d 1
+
+newmtl mat21
+Kd 0 0 0
+d 1
+
