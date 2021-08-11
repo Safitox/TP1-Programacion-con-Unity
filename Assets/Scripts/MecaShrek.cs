@@ -71,7 +71,7 @@ public class MecaShrek : MonoBehaviour
                 lr1.SetPosition(1, posAntiguaJugador);
                 lr2.SetPosition(1, posAntiguaJugador);
                 if (Random.Range(0, 2) == 1) 
-                    GameManager.GM.Explosion(posAntiguaJugador);
+                    GameManager.Instance.Explosion(posAntiguaJugador);
             }
                 posAntiguaJugador = jugador.position;
             
@@ -113,7 +113,7 @@ public class MecaShrek : MonoBehaviour
 
     void ExplotarOrejaI()
     {
-        GameManager.GM.Explosion(new Vector3(Random.Range(-2.5f, 2.5f), Random.Range(-2f, 2f), Random.Range(-0.5f, 0.5f)) + exploreja_izq.position);
+        GameManager.Instance.Explosion(new Vector3(Random.Range(-2.5f, 2.5f), Random.Range(-2f, 2f), Random.Range(-0.5f, 0.5f)) + exploreja_izq.position);
         GetComponent<AudioSource>().PlayOneShot(sndExplosionGrande, 1f);
         explosIzq++;
         if (explosIzq!=3)
@@ -130,7 +130,7 @@ public class MecaShrek : MonoBehaviour
 
     void ExplotarOrejaD()
     {
-        GameManager.GM.Explosion(new Vector3(Random.Range(-2.5f, 2.5f), Random.Range(-2f, 2f), Random.Range(-0.5f, 0.5f)) + exploreja_der.position);
+        GameManager.Instance.Explosion(new Vector3(Random.Range(-2.5f, 2.5f), Random.Range(-2f, 2f), Random.Range(-0.5f, 0.5f)) + exploreja_der.position);
         GetComponent<AudioSource>().PlayOneShot(sndExplosionGrande, 1f);
         explosDer++;
         if (explosDer != 3)
@@ -153,7 +153,7 @@ public class MecaShrek : MonoBehaviour
 
     public void Temblar()
     {
-        GameManager.GM.SacudirCamara(30f);
+        GameManager.Instance.SacudirCamara(30f);
     }
 
 

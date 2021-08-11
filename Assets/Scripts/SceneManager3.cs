@@ -101,7 +101,7 @@ public class SceneManager3 : MonoBehaviour
     public void ActivarNuevoRobotDestruido(Transform original)
     {
 
-        GameManager.GM.Explosion (original.position);
+        GameManager.Instance.Explosion (original.position);
 
     }
 

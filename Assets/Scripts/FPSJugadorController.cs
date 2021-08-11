@@ -28,6 +28,7 @@ public class FPSJugadorController : MonoBehaviour
     [SerializeField] AudioClip sndOuch;
     Vector3 centroRef = new Vector3(0.5f, 0.5f, 0f);
     bool blMisil;
+    bool blTutorial;
 
 
     private void Start()
@@ -39,6 +40,21 @@ public class FPSJugadorController : MonoBehaviour
     private void Awake()
     {
         poolBalas = GameObject.Find("poolBalasJugador").transform;
+    }
+
+    private void OnEnable()
+    {
+        GameManager.Instance.OnCambioEstadoTutorial += EstadoTutorial;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.OnCambioEstadoTutorial -= EstadoTutorial;
+    }
+
+    void EstadoTutorial(bool OnOff)
+    {
+        blTutorial = OnOff;
     }
 
     void Update()
@@ -60,9 +76,9 @@ public class FPSJugadorController : MonoBehaviour
             Disparar();
         }
         if (Input.GetKeyUp(KeyCode.K))
-            GameManager.GM.SacudirCamara(2f);
+            GameManager.Instance.SacudirCamara(2f);
         if (Input.GetKeyUp(KeyCode.KeypadPlus) || Input.GetKeyUp(KeyCode.Plus))
-            GameManager.GM.PASEDENIVEL();
+            GameManager.Instance.PASEDENIVEL();
         if (Input.GetKeyUp(KeyCode.E))
         {
             blMisil = true;
@@ -101,7 +117,7 @@ public class FPSJugadorController : MonoBehaviour
         }
         else if (blMisil)
         {
-            if (GameManager.GM.stockMisiles == 0)
+            if (GameManager.Instance.stockMisiles == 0)
                 return;
             if (Time.timeSinceLevelLoad - ultimoMisil >= frecuenciaMisiles)
             {
@@ -123,7 +139,7 @@ public class FPSJugadorController : MonoBehaviour
                 _bala.transform.position = puntaArma.position;
                 _bala.transform.forward = objetivo.normalized;
                 _bala.GetComponent<Rigidbody>().AddForce((objetivo - puntaArma.position).normalized * velocidadMisil, ForceMode.Impulse);
-                GameManager.GM.stockMisiles--;
+                GameManager.Instance.stockMisiles--;
                 ultimoMisil = Time.timeSinceLevelLoad;
             }
         }
@@ -181,22 +197,22 @@ public class FPSJugadorController : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("exploder"))
         {
-            GameManager.GM.JugadorTocado(18);
+            GameManager.Instance.JugadorTocado(18);
 
         }
         else if (collision.gameObject.CompareTag("bala"))
         {
-            GameManager.GM.JugadorTocado(1);
+            GameManager.Instance.JugadorTocado(1);
           //  GetComponent<AudioSource>().PlayOneShot(sndOuch, 0.3f);
         }
         else if (collision.gameObject.CompareTag("salida"))
         {
-            GameManager.GM.PASEDENIVEL();
+            GameManager.Instance.PASEDENIVEL();
             
         }
         else if (collision.gameObject.CompareTag("cajaMisiles"))
         {
-            GameManager.GM.stockMisiles += 10;
+            GameManager.Instance.stockMisiles += 10;
             collision.gameObject.SetActive(false);
         }
 

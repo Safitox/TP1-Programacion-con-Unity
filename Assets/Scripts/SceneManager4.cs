@@ -104,7 +104,7 @@ public class SceneManager4 : MonoBehaviour
     public void ActivarNuevoRobotDestruido(Transform original)
     {
 
-        GameManager.GM.Explosion (original.position);
+        GameManager.Instance.Explosion (original.position);
 
     }
 
@@ -116,14 +116,14 @@ public class SceneManager4 : MonoBehaviour
     public void SpawnearJugador()
     {
         jugador.position = spawnJugador.position;
-        GameManager.GM.stockMisiles = 2;
+        GameManager.Instance.stockMisiles = 2;
 
     }
 
     public void Victorioso()
     {
         Victoria.SetActive(true);
-        GameManager.GM.VidaJugador = 50000;
+        GameManager.Instance.VidaJugador = 50000;
         Time.timeScale = 0;
     }
 

@@ -25,7 +25,7 @@ public class BombaRotadora : MonoBehaviour
     }
     private void Awake()
     {
-        if (GameManager.GM.EscenaActual == 4)
+        if (GameManager.Instance.EscenaActual == 4)
             fuerza = 7f;
     }
 
@@ -83,8 +83,8 @@ public class BombaRotadora : MonoBehaviour
     {
         GetComponent<Rigidbody>().velocity = Vector3.zero;
         GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-        GameManager.GM.Explosion(transform.position);
-        if (GameManager.GM.EscenaActual==4)
+        GameManager.Instance.Explosion(transform.position);
+        if (GameManager.Instance.EscenaActual==4)
         {
             GameObject _caja = SceneManager4.SM.GenerarCaja();
             _caja.transform.position = transform.position;

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class SceneManager1 : MonoBehaviour
 {
     [Header("GameObjects")]
@@ -19,6 +20,9 @@ public class SceneManager1 : MonoBehaviour
     //bool blSpawnersActivos = true;
     [SerializeField]
     Transform spawnJugador;
+    [SerializeField]
+    Transform spawnTutorial;
+    [SerializeField] GameObject goTutorial;
 
 
     Transform jugador;
@@ -28,6 +32,7 @@ public class SceneManager1 : MonoBehaviour
     [Header("Variables")]
     public int ChancesCabezaBuena = 20;
     public int SpawnersRestantes = 0;
+    private bool blGameOn=false;
 
     [Header("prefabs/materiales")]
     [SerializeField] 
@@ -40,10 +45,6 @@ public class SceneManager1 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        for (int i=0;i<5;i++)
-        {
-           // GenerarRobot1(false);
-        }
         foreach (GameObject go in  GameObject.FindGameObjectsWithTag("spawner"))
         {
             spawners.Add(go.GetComponent<Spawner1>());
@@ -52,23 +53,48 @@ public class SceneManager1 : MonoBehaviour
         }
         jugador = GameObject.FindGameObjectWithTag("Player").transform;
         poolBalas = GameObject.Find("poolBalasJugador").transform;
-        GM = GameObject.Find("GameManager").GetComponent<GameManager>();
-        Invoke("SpawnearUno", 3f);
-        SpawnearJugador();
     }
 
+    private void OnEnable()
+    {
+        GameManager.Instance.OnCambioEstadoTutorial += EstadoTutorial;
+        GameManager.Instance.OnCambioEstadoGame += EstadoGame;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.OnCambioEstadoTutorial -= EstadoTutorial;
+        GameManager.Instance.OnCambioEstadoGame -= EstadoGame;
+    }
+
+    private void EstadoGame(bool OnOff)
+    {
+        if (OnOff)
+        {
+            Invoke("SpawnearUno", 3f);
+            SpawnearJugador(spawnJugador.position);
+        }
+        blGameOn = OnOff;
+    }
+
+    private void EstadoTutorial(bool OnOff)
+    {
+        goTutorial.SetActive(OnOff);
+        if (OnOff)
+        {
+            SpawnearJugador(spawnJugador.position);
+        }
+    }
 
 
 
     public void SpawnearUno()
     {
-        if (SpawnersRestantes != 0)
+        if (SpawnersRestantes != 0 && blGameOn)
         {
             ActivarNuevoRobot();
-            Invoke("SpawnearUno", Random.Range(7f, 12f));
         }
-
-
+        Invoke("SpawnearUno", Random.Range(7f, 12f));
     }
 
 
@@ -206,9 +232,9 @@ public class SceneManager1 : MonoBehaviour
 //        blSpawnersActivos = false;
     }
 
-    public void SpawnearJugador()
+    public void SpawnearJugador(Vector3 pos)
     {
-        jugador.position = spawnJugador.position;
+        jugador.position = pos;
 
     }
 

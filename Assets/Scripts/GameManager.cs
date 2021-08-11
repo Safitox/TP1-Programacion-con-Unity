@@ -1,8 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-public class GameManager : MonoBehaviour
+using Random = UnityEngine.Random;
+
+public class GameManager : Singleton<GameManager>
 {
     [Header("Escenas")]
     [SerializeField] string[] Escenas;
@@ -17,6 +20,7 @@ public class GameManager : MonoBehaviour
     bool blInvulnerable=false;
     float tpoSacudida=0;
     public int stockMisiles = 10;
+   // private bool blTutorial = false;
 
     [Header("GameObjects")]
     [SerializeField]
@@ -33,7 +37,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Referencias")]
     [SerializeField] GameObject obSCMAN;
-    [SerializeField] Transform jugador;
+    public Transform jugador;
 
     [Header("UI")]
     [SerializeField] TMPro.TextMeshProUGUI txtVida;
@@ -45,8 +49,46 @@ public class GameManager : MonoBehaviour
     [SerializeField] AudioClip sndJugadorMuyDañado;
     [SerializeField] AudioClip sndJugadorMuere;
 
+    [Header("Acciones")]
+    public Action onStartGame;
+    private bool _blTutorial = false;
+    private bool _blGameOn = false;
+    public event OnVariableChangeDelegate OnCambioEstadoTutorial;
+    public event OnVariableChangeDelegate OnCambioEstadoGame;
+    public delegate void OnVariableChangeDelegate(bool newVal);
 
-    public static GameManager GM;
+    public bool blTutorial
+    {
+        get
+        {
+            return _blTutorial;
+        }
+        set
+        {
+            if (_blTutorial == value) return;
+            _blTutorial = value;
+            if (OnCambioEstadoTutorial != null)
+                OnCambioEstadoTutorial(_blTutorial);
+        }
+    }
+
+    public bool blGameOn    {
+        get
+        {
+            return _blGameOn;
+        }
+        set
+        {
+            if (_blGameOn == value) return;
+            _blGameOn = value;
+            if (OnCambioEstadoGame != null)
+                OnCambioEstadoGame(_blGameOn);
+        }
+    }
+
+
+
+
     public int chequeo = 0;
 
     void Start()
@@ -66,6 +108,12 @@ public class GameManager : MonoBehaviour
             tpoSacudida -= Time.deltaTime;
             jugador.GetChild(0).localPosition = new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), Random.Range(-1, 1)) * 0.3f;
         }
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            if (blTutorial)
+                blTutorial = false;
+        }
+
 
     }
 
@@ -97,20 +145,7 @@ public class GameManager : MonoBehaviour
                 txtMisiles = GameObject.Find("UITXTmisiles").GetComponent<TMPro.TextMeshProUGUI>();
         }
     }
-    void Awake()
-    {
-        if (GM != null)
-            GameObject.Destroy(GM);
-        else
-            GM = this;
 
-
-        DontDestroyOnLoad(this.gameObject);
-
-    }
-
-
- 
 
     public void Explosion(Vector3 posicion)
     {
@@ -190,6 +225,7 @@ public class GameManager : MonoBehaviour
         if (EscenaActual!=0)
             GetComponent<AudioSource>().PlayOneShot(sndJugadorFesteja, 1);
         EscenaActual++;
+        blTutorial = true;
 
 
     }
@@ -197,6 +233,14 @@ public class GameManager : MonoBehaviour
     public void SacudirCamara(float tiempo)
     {
         tpoSacudida = tiempo;
+    }
+
+
+
+    public void IniciarPartida()
+    {
+        if (onStartGame != null)
+            onStartGame();
     }
 
 }
