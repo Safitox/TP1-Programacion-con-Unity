@@ -16,37 +16,69 @@ public class SceneManager3 : MonoBehaviour
     Transform spawnJugador;
     [SerializeField] Transform centro;
     [SerializeField] Transform Lava;
-
+    [SerializeField] GameObject goTutorial;
 
 
     Transform jugador;
 
     [Header("Variables")]
-
+    private bool blGameOn = false;
 
     [Header("prefabs/materiales")]
     [SerializeField] 
     GameObject pf_robot1;
     [SerializeField] GameObject pf_balaEnemigo;
+
+
+
     // Start is called before the first frame update
     void Start()
     {
-        for (int i=0;i<5;i++)
-        {
-           // GenerarRobot1(false);
-        }
         foreach (GameObject go in  GameObject.FindGameObjectsWithTag("spawner"))
         {
             spawners.Add(go.transform);
         }
         jugador = GameObject.FindGameObjectWithTag("Player").transform;
         poolBalas = GameObject.Find("poolBalasJugador").transform;
-        Invoke("SpawnearUno", 10f);
+        EstadoTutorial(true);
+    }
+
+    private void OnEnable()
+    {
+        GameManager.Instance.OnCambioEstadoTutorial += EstadoTutorial;
+        GameManager.Instance.OnCambioEstadoGame += EstadoGame;
+        GameManager.Instance.onRespawn += Respawn;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.OnCambioEstadoTutorial -= EstadoTutorial;
+        GameManager.Instance.OnCambioEstadoGame -= EstadoGame;
+        GameManager.Instance.onRespawn -= Respawn;
+    }
+    private void Respawn()
+    {
         SpawnearJugador();
     }
 
+    private void EstadoGame(bool OnOff)
+    {
+        if (OnOff)
+        {
+            Invoke("SpawnearUno", 10f);
+            SpawnearJugador();
+        }
+        blGameOn = OnOff;
+    }
 
-
+    private void EstadoTutorial(bool OnOff)
+    {
+        goTutorial.SetActive(OnOff);
+        if (OnOff)
+        {
+            SpawnearJugador();
+        }
+    }
 
 
     public void SpawnearUno()

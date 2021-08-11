@@ -20,6 +20,7 @@ public class GameManager : Singleton<GameManager>
     bool blInvulnerable=false;
     float tpoSacudida=0;
     public int stockMisiles = 10;
+    public float volMusica = 0.2f;
    // private bool blTutorial = false;
 
     [Header("GameObjects")]
@@ -48,9 +49,12 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] AudioClip sndJugadorFesteja;
     [SerializeField] AudioClip sndJugadorMuyDañado;
     [SerializeField] AudioClip sndJugadorMuere;
+    public AudioClip MusicaTutorial;
 
     [Header("Acciones")]
     public Action onStartGame;
+    public Action onPlayerDamaged;
+    public Action onRespawn;
     private bool _blTutorial = false;
     private bool _blGameOn = false;
     public event OnVariableChangeDelegate OnCambioEstadoTutorial;
@@ -111,7 +115,10 @@ public class GameManager : Singleton<GameManager>
         if (Input.GetKeyDown(KeyCode.E))
         {
             if (blTutorial)
+            {
                 blTutorial = false;
+                blGameOn = true;
+            }
         }
 
 
@@ -178,6 +185,12 @@ public class GameManager : Singleton<GameManager>
             uiDamage.GetComponent<Animator>().SetTrigger("ouch");
             if (VidaJugador <= 0)
                 MuereJugador();
+            else
+            {
+                if (onPlayerDamaged != null)
+                    onPlayerDamaged();
+            }
+
         }
 
     }
@@ -208,24 +221,26 @@ public class GameManager : Singleton<GameManager>
 
 
 
-    void AunVivo()
+    public void AunVivo()
     {
         blInvulnerable = false;
         UIMuerto.SetActive(false);
         VidaJugador = VidaInicial;
-        obSCMAN.SendMessage("SpawnearJugador");
+        if (onRespawn != null)
+            onRespawn();
     }
 
 
     public void PASEDENIVEL(int overrider=0)
     {
+        blTutorial = true;
+        blGameOn = false;
         if (overrider != 0)
             EscenaActual = overrider-1;
         SceneManager.LoadScene(Escenas[EscenaActual],LoadSceneMode.Single);
         if (EscenaActual!=0)
             GetComponent<AudioSource>().PlayOneShot(sndJugadorFesteja, 1);
         EscenaActual++;
-        blTutorial = true;
 
 
     }
@@ -239,6 +254,8 @@ public class GameManager : Singleton<GameManager>
 
     public void IniciarPartida()
     {
+        blTutorial = false;
+        blGameOn = true;
         if (onStartGame != null)
             onStartGame();
     }

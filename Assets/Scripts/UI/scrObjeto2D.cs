@@ -15,15 +15,11 @@ public class scrObjeto2D : MonoBehaviour
     {
 
         Visibilidad((transform.position - jugador.position).sqrMagnitude <= 100);
-        if (visible)
-        {
             Vector3 targetPostition = new Vector3(jugador.position.x,
                         this.transform.position.y,
                         jugador.position.z);
             this.transform.LookAt(targetPostition);
-
         }
-    }
 
     void Visibilidad(bool estado)
     {

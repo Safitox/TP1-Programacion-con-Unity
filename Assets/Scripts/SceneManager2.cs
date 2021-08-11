@@ -22,15 +22,20 @@ public class SceneManager2 : MonoBehaviour
     bool blRotar = false;
     bool blSalvadora = false;
     int stage=0;
+    private bool blGameOn = false;
 
+    [SerializeField]
+    Transform spawnTutorial;
+    [SerializeField] GameObject goTutorial;
 
 
     void Start()
     {
         Bombas.AddRange(GameObject.FindGameObjectsWithTag("bombarotadora"));
         Bombas.Add(GameObject.FindGameObjectWithTag("salvadora"));
-        ConmutarRotacion(false);
+     //   ConmutarRotacion(false);
         salida.SetActive(false);
+        EstadoTutorial(true);
     }
 
     // Update is called once per frame
@@ -39,6 +44,44 @@ public class SceneManager2 : MonoBehaviour
         if (blRotar)
             rotador.Rotate(0,  15 * Time.deltaTime,0); 
     }
+
+    private void OnEnable()
+    {
+        GameManager.Instance.OnCambioEstadoTutorial += EstadoTutorial;
+        GameManager.Instance.OnCambioEstadoGame += EstadoGame;
+        GameManager.Instance.onRespawn += Respawn;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.OnCambioEstadoTutorial -= EstadoTutorial;
+        GameManager.Instance.OnCambioEstadoGame -= EstadoGame;
+        GameManager.Instance.onRespawn -= Respawn;
+    }
+
+    private void Respawn()
+    {
+        SpawnearJugador(spawnJugador.position);
+    }
+    private void EstadoGame(bool OnOff)
+    {
+        if (OnOff)
+        {
+            Invoke("SoltarBomba", 3f);
+            Respawn();
+        }
+        blGameOn = OnOff;
+    }
+
+    private void EstadoTutorial(bool OnOff)
+    {
+        goTutorial.SetActive(OnOff);
+        if (OnOff)
+        {
+            SpawnearJugador(spawnTutorial.position);
+        }
+    }
+
 
 
     void ConmutarRotacion(bool Activar)
@@ -70,6 +113,8 @@ public class SceneManager2 : MonoBehaviour
 
     void SoltarBomba()
     {
+        if (!blGameOn)
+            return;
         switch (stage)
         {
             case 0:
@@ -124,9 +169,9 @@ public class SceneManager2 : MonoBehaviour
     {
     }
 
-    public void SpawnearJugador()
+    public void SpawnearJugador(Vector3 pos)
     {
-        Jugador.position = spawnJugador.position;
+        Jugador.position = pos;
 
     }
 

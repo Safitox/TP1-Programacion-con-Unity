@@ -15,7 +15,8 @@ public class Lava : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        transform.position += velAscenso * Time.deltaTime   ;
+        if (GameManager.Instance.blGameOn)
+            transform.position += velAscenso * Time.deltaTime   ;
         
     }
 

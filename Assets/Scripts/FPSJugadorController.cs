@@ -70,19 +70,27 @@ public class FPSJugadorController : MonoBehaviour
             speed = 8;
         if (Input.GetKeyUp(KeyCode.LeftShift))
             speed = 5;
-        if (Input.GetMouseButton(0))
+        if (!blTutorial)
         {
-            blMisil = false;
-            Disparar();
+            if (Input.GetMouseButton(0))
+            {
+                blMisil = false;
+                Disparar();
+            }
         }
-        if (Input.GetKeyUp(KeyCode.K))
-            GameManager.Instance.SacudirCamara(2f);
         if (Input.GetKeyUp(KeyCode.KeypadPlus) || Input.GetKeyUp(KeyCode.Plus))
             GameManager.Instance.PASEDENIVEL();
         if (Input.GetKeyUp(KeyCode.E))
         {
-            blMisil = true;
-            Disparar();
+            if (!blTutorial)
+            {
+                blMisil = true;
+                Disparar();
+            }
+            else
+            {
+                GameManager.Instance.IniciarPartida();
+            }
         }
         transform.Translate(velocity.x, 0, velocity.y);
     }

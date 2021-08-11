@@ -43,7 +43,7 @@ public class BombaRotadora : MonoBehaviour
                 {
                     blbye = true;
                     GetComponent<AudioSource>().PlayOneShot(muere, 0.2f);
-                    Invoke("Explotar", Random.Range(0.1f, 0.7f));
+                    Invoke("Explotar", Random.Range(0.1f, 0.2f));
                 }
             }
         }

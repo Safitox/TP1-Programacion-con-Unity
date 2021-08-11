@@ -28,14 +28,23 @@ public class Robot2 : MonoBehaviour
 
     void Start()
     {
+        EstadoGame(GameManager.Instance.blGameOn);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnEnable()
     {
-
+        GameManager.Instance.OnCambioEstadoGame += EstadoGame;
     }
 
+    private void OnDisable()
+    {
+        GameManager.Instance.OnCambioEstadoGame -= EstadoGame;
+    }
+
+    void EstadoGame(bool OnOff)
+    {
+        blDisparar = OnOff;
+    }
 
     private void Awake()
     {
@@ -71,11 +80,6 @@ public class Robot2 : MonoBehaviour
 
 
     }
-
-
-
-
-
 
     void Disparar()
     {

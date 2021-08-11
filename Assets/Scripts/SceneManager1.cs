@@ -27,7 +27,6 @@ public class SceneManager1 : MonoBehaviour
 
     Transform jugador;
     [Header("Referencias")]
-    GameManager GM;
 
     [Header("Variables")]
     public int ChancesCabezaBuena = 20;
@@ -53,18 +52,21 @@ public class SceneManager1 : MonoBehaviour
         }
         jugador = GameObject.FindGameObjectWithTag("Player").transform;
         poolBalas = GameObject.Find("poolBalasJugador").transform;
+        EstadoTutorial(true);
     }
 
     private void OnEnable()
     {
         GameManager.Instance.OnCambioEstadoTutorial += EstadoTutorial;
         GameManager.Instance.OnCambioEstadoGame += EstadoGame;
+        GameManager.Instance.onRespawn += Respawn;
     }
 
     private void OnDisable()
     {
         GameManager.Instance.OnCambioEstadoTutorial -= EstadoTutorial;
         GameManager.Instance.OnCambioEstadoGame -= EstadoGame;
+        GameManager.Instance.onRespawn -= Respawn;
     }
 
     private void EstadoGame(bool OnOff)
@@ -72,7 +74,7 @@ public class SceneManager1 : MonoBehaviour
         if (OnOff)
         {
             Invoke("SpawnearUno", 3f);
-            SpawnearJugador(spawnJugador.position);
+            Respawn();
         }
         blGameOn = OnOff;
     }
@@ -82,10 +84,14 @@ public class SceneManager1 : MonoBehaviour
         goTutorial.SetActive(OnOff);
         if (OnOff)
         {
-            SpawnearJugador(spawnJugador.position);
+            SpawnearJugador(spawnTutorial.position);
         }
     }
 
+    private void Respawn()
+    {
+        SpawnearJugador(spawnJugador.position);
+    }
 
 
     public void SpawnearUno()
@@ -148,7 +154,7 @@ public class SceneManager1 : MonoBehaviour
         rdes.transform.position = original.position;
         rdes.transform.rotation = original.rotation;
         rdes.SetActive(true);
-        GM.Explosion (original.position);
+        GameManager.Instance.Explosion (original.position);
         rdes = CabezaRobot1();
         rdes.transform.position = original.position;
         rdes.SetActive(true);
