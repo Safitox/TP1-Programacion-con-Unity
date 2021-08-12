@@ -18,11 +18,6 @@ public class Spawner1 : MonoBehaviour
         GetComponent<ParticleSystem>().Stop();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
     public void Anclar(Transform enemigo)
     {
 
@@ -38,8 +33,6 @@ public class Spawner1 : MonoBehaviour
         {
             anclajeEnemigo.GetChild(0).GetComponent<Robot1>().Activar();
 
-         //   anclajeEnemigo.GetChild(0).SetParent(null);
-         //   anclajeEnemigo.GetChild(0).SetParent(null);
         }
 
 

@@ -7,7 +7,6 @@ using UnityEngine.UI;
 
 public class Robot1 : MonoBehaviour
 {
-    // Start is called before the first frame update
     public float vida = 50;
     public Transform Jugador;
     Transform Cabeza;
@@ -22,29 +21,26 @@ public class Robot1 : MonoBehaviour
     [SerializeField] Transform canon2;
     [SerializeField] AudioClip sndImpacto;
     public bool blDisparar = false;
-
+    private Animator anim;
 
     [Header("Audio")]
     [SerializeField]
     AudioClip sndDisparo;
     [SerializeField]
     AudioClip[] sndActivar;
+    private AudioSource audio;
+
 
     void Start()
     {
         Cabeza = transform.GetChild(0);
-    }
-
-
-
-    void Update()
-    {
-
+        audio = GetComponent<AudioSource>();
     }
 
 
     private void Awake()
     {
+        anim = GetComponent<Animator>();
         cara.material.color = Color.white;
         SCMAN = GameObject.Find("SceneManager").GetComponent<SceneManager1>(); 
     }
@@ -55,12 +51,18 @@ public class Robot1 : MonoBehaviour
             Perseguir();
     }
 
+    private void OnEnable()
+    {
+        anim.SetBool("Apagar", true);
+        vida = 20;
+        blmovible = false;
+        CancelInvoke();
+    }
 
     public void Activar()
     {
-        vida = 20;
         this.transform.SetParent(SCMAN.poolRobots1);
-        transform.GetComponent<Animator>().SetTrigger("Activar");
+        anim.SetBool("Apagar", false);
         Invoke("Disparar", 4f);
         Invoke("Persecucion", 2.5f);
 
@@ -72,10 +74,8 @@ public class Robot1 : MonoBehaviour
         blDisparar = true;
         blmovible = true;
         cara.material.color = Color.red;
-        GetComponent<AudioSource>().PlayOneShot(sndActivar[UnityEngine.Random.Range(0, sndActivar.Length)]);
+        audio.PlayOneShot(sndActivar[UnityEngine.Random.Range(0, sndActivar.Length)]);
     }
-
-
 
 
 
@@ -95,7 +95,7 @@ public class Robot1 : MonoBehaviour
         {
             vida -= 2 * float.Parse(pars[1].ToString());
             if (sndImpacto)
-                GetComponent<AudioSource>().PlayOneShot(sndImpacto, 1f);
+                audio.PlayOneShot(sndImpacto, 1f);
             EvaluarVida();
 
         }
@@ -113,7 +113,7 @@ public class Robot1 : MonoBehaviour
         if (vida<=0)
         {
             SCMAN.ActivarNuevoRobotDestruido(transform);
-            blmovible = false;
+            audio.Stop();
             blDisparar = false;
             gameObject.SetActive(false);
         }
@@ -140,8 +140,5 @@ public class Robot1 : MonoBehaviour
             GetComponent<AudioSource>().PlayOneShot(sndDisparo, 0.3f);
         Invoke("Disparar", UnityEngine.Random.Range(1f, 3f));
     }
-
-
-
 
 }

@@ -123,7 +123,7 @@ public class SceneManager1 : MonoBehaviour
         }
         GameObject enemigo = GenerarRobot1(true);
         enemigo.SetActive(true);
-        enemigo.GetComponent<Animator>().SetTrigger("Desactivar");
+        //enemigo.GetComponent<Animator>().SetTrigger("Desactivar");
         spawners[spSeleccionado].Anclar(enemigo.transform);
     }
 

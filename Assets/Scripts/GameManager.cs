@@ -260,4 +260,10 @@ public class GameManager : Singleton<GameManager>
             onStartGame();
     }
 
+    public void Quit()
+    {
+        Application.Quit();
+    }
+
 }
+
