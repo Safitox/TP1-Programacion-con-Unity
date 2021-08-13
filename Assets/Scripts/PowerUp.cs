@@ -7,7 +7,7 @@ public class PowerUp : MonoBehaviour
     [SerializeField] int addVida = 0;
     [SerializeField] bool ExtraLife = false;
     [SerializeField] int dmgBoost = 0;
-    [SerializeField] float tpoVida = 5f;
+//    [SerializeField] float tpoVida = 5f;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -17,7 +17,9 @@ public class PowerUp : MonoBehaviour
                 GameManager.Instance.Vidas++;
             else if (addVida != 0)
                 GameManager.Instance.AddVida(addVida);
-            
+            else if (dmgBoost != 0)
+                GameManager.Instance.AddPlusDmg();
+            Destroy(this.gameObject);
         }
     }
 

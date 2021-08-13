@@ -151,10 +151,6 @@ public class MecaShrek : MonoBehaviour
             SceneManager4.SM.Victorioso();
     }
 
-    public void Temblar()
-    {
-        GameManager.Instance.SacudirCamara(30f);
-    }
 
 
 

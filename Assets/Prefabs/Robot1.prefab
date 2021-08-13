@@ -904,6 +904,7 @@ MonoBehaviour:
   canon2: {fileID: 3669387107273965075}
   sndImpacto: {fileID: 8300000, guid: ad954bc140dc41d4ba9488f014fe7e39, type: 3}
   blDisparar: 0
+  chancePowerUp: 40
   sndDisparo: {fileID: 8300000, guid: 57ddef70d42556c4cba56a5ef019d40b, type: 3}
   sndActivar:
   - {fileID: 8300000, guid: f5f95df399cc5af4dbc85df9c1bcc41f, type: 3}

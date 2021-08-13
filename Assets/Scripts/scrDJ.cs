@@ -5,16 +5,16 @@ using UnityEngine;
 public class scrDJ : MonoBehaviour
 {
     [SerializeField] AudioClip Musica;
-    private AudioSource audio;
+    private AudioSource _audio;
     private void Start()
     {
         if (!GetComponent<AudioSource>())
-            audio = gameObject.AddComponent<AudioSource>() as AudioSource;
+            _audio = gameObject.AddComponent<AudioSource>() as AudioSource;
         else
-            audio = GetComponent<AudioSource>();
+            _audio = GetComponent<AudioSource>();
 
-        audio.volume = GameManager.Instance.volMusica;
-        audio.loop = true;
+        _audio.volume = GameManager.Instance.volMusica;
+        _audio.loop = true;
         EstadoTutorial(GameManager.Instance.blTutorial);
     }
     private void OnEnable()
@@ -34,16 +34,16 @@ public class scrDJ : MonoBehaviour
     {
         if (OnOff)
         {
-            audio.clip = GameManager.Instance.MusicaTutorial;
-            audio.Play();
+            _audio.clip = GameManager.Instance.MusicaTutorial;
+            _audio.Play();
         }
     }
     void EstadoGame(bool OnOff)
     {
         if (OnOff)
         {
-            audio.clip = Musica;
-            audio.Play();
-        }
+            _audio.clip = Musica;
+            _audio.Play();
+        }   
     }
 }

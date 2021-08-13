@@ -38,7 +38,7 @@ public class SceneManager3 : MonoBehaviour
         {
             spawners.Add(go.transform);
         }
-        jugador = GameObject.FindGameObjectWithTag("Player").transform;
+        jugador = GameManager.Instance.jugador;
         poolBalas = GameObject.Find("poolBalasJugador").transform;
         EstadoTutorial(true);
     }
@@ -60,10 +60,8 @@ public class SceneManager3 : MonoBehaviour
         GameManager.Instance.onPlayerdied += MurioElJugador;
 
     }
-    private void Respawn()
-    {
-        SpawnearJugador();
-    }
+    private void Respawn() => SpawnearJugador();
+    
 
     private void EstadoGame(bool OnOff)
     {
@@ -134,17 +132,7 @@ public class SceneManager3 : MonoBehaviour
 
 
 
-    public void ActivarNuevoRobotDestruido(Transform original)
-    {
-
-        GameManager.Instance.Explosion (original.position);
-
-    }
-
-
-
-
-
+    public void ActivarNuevoRobotDestruido(Transform original) => GameManager.Instance.Explosion (original.position);
 
     public GameObject GenerarBalaEnemiga()
     {
@@ -178,11 +166,9 @@ public class SceneManager3 : MonoBehaviour
         Lava.GetComponent<Lava>().Reiniciar();
     }
 
-    public void SpawnearJugador()
-    {
-        jugador.position = spawnJugador.position;
+    public void SpawnearJugador() => jugador.position = spawnJugador.position;
 
-    }
+    
 
 
 }

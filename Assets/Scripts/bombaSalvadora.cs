@@ -14,7 +14,7 @@ public class bombaSalvadora : MonoBehaviour
         }
         else if (collision.gameObject.CompareTag("piso"))
         {
-            gameObject.GetComponent<Rigidbody>().isKinematic = true;
+            Destroy(gameObject.GetComponent<Rigidbody>());
         }
         
     }

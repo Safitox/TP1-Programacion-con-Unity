@@ -14,6 +14,7 @@ public class BombaRotadora : MonoBehaviour
     public int Vida = 20;
     [SerializeField] AudioClip muere;
     [SerializeField] AudioClip ouch;
+    [SerializeField] int chancePowerUp = 0;
 
 
 
@@ -92,6 +93,9 @@ public class BombaRotadora : MonoBehaviour
             this.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
 
         }
+        if (UnityEngine.Random.Range(0, 100) < chancePowerUp)
+            GameManager.Instance.SoltarPowerUp(transform.position);
+
         gameObject.SetActive(false);
 
     }

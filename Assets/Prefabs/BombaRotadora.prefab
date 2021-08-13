@@ -131,6 +131,7 @@ MonoBehaviour:
   Vida: 20
   muere: {fileID: 8300000, guid: b86791fd08ea70747b37255b87b02ce0, type: 3}
   ouch: {fileID: 8300000, guid: 9ca7f629a8e623342981ca35e7f1741c, type: 3}
+  chancePowerUp: 50
 --- !u!82 &7480516192302606447
 AudioSource:
   m_ObjectHideFlags: 0

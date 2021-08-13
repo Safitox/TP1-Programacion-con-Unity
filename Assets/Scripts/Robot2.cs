@@ -49,6 +49,7 @@ public class Robot2 : MonoBehaviour
     private void Awake()
     {
         cara.material.color = Color.red;
+        Jugador = GameManager.Instance.jugador;
         SCMAN = GameObject.Find("SceneManager").GetComponent<SceneManager2>();
         Activar();
     }

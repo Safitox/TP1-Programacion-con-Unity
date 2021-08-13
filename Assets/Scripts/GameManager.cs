@@ -19,10 +19,10 @@ public class GameManager : Singleton<GameManager>
     public float _VidaJugador = 0;
     public int EscenaActual = 0;
     bool blInvulnerable=false;
-    float tpoSacudida=0;
     public int _stockMisiles = -1;
     public float volMusica = 0.2f;
-    public float basicBullerDmg = 1f;
+    public float basicBulletDmg = 1f;
+    [SerializeField] float defaultBulletDamage;
    // private bool blTutorial = false;
 
     [Header("GameObjects")]
@@ -40,6 +40,7 @@ public class GameManager : Singleton<GameManager>
     [Header("Referencias")]
     [SerializeField] GameObject obSCMAN;
     public Transform jugador;
+    private PowerUpDispenser _PowerUpDispenser;
 
     [Header("UI")]
     [SerializeField] GameObject canvasJuego;
@@ -58,8 +59,10 @@ public class GameManager : Singleton<GameManager>
     public Action onRestart;
     private bool _blTutorial = false;
     private bool _blGameOn = false;
+    private bool _blPlusDMG = false;
     public Action<bool> OnCambioEstadoTutorial;
     public Action<bool> OnCambioEstadoGame;
+    public Action<bool> OnPlusDMG;
     public Action<int>  OnCambioVidas;
     public Action<int> OnCambioMisiles;
     public Action<float> OnCambioVidaJugador ;
@@ -79,7 +82,19 @@ public class GameManager : Singleton<GameManager>
                 OnCambioEstadoTutorial(_blTutorial);
         }
     }
-
+    public bool blPlusDMG
+    {
+        get
+        {
+            return _blPlusDMG;
+        }
+        set
+        {
+            if (_blPlusDMG == value) return;
+            _blPlusDMG = value;
+            OnPlusDMG?.Invoke(_blPlusDMG);
+        }
+    }
     public bool blGameOn    {
         get
         {
@@ -142,23 +157,13 @@ public class GameManager : Singleton<GameManager>
 
     void Start()
     {
-
         VidaJugador = 20;
-    //    canvasJuego.SetActive(false);
         SceneManager.sceneLoaded += OnSceneLoaded;
-
+        _PowerUpDispenser = GetComponent<PowerUpDispenser>();
 
     }
-
-    // Update is called once per frame
     void Update()
     {
-        if (tpoSacudida != 0 && false)
-        {
-
-            tpoSacudida -= Time.deltaTime;
-            jugador.GetChild(0).localPosition = new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), Random.Range(-1, 1)) * 0.3f;
-        }
         if (Input.GetKeyDown(KeyCode.E))
         {
             if (blTutorial)
@@ -167,18 +172,15 @@ public class GameManager : Singleton<GameManager>
                 blGameOn = true;
             }
         }
-
-
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        //canvasJuego.SetActive(EscenaActual != 0);
         if (EscenaActual != 0)
         {
-            
             CancelInvoke();
-            basicBullerDmg = 1f;
+            basicBulletDmg = defaultBulletDamage;
+            blPlusDMG = false;
             obSCMAN = GameObject.Find("SceneManager");
             poolExplosiones = GameObject.Find("poolExplosiones").transform;
             jugador = GameObject.FindGameObjectWithTag("Player").transform;
@@ -200,7 +202,6 @@ public class GameManager : Singleton<GameManager>
     public void Explosion(Vector3 posicion)
     {
         GameObject exp = GenerarExplosion();
-
         exp.transform.position = posicion;
         exp.SetActive(true);
     }
@@ -229,8 +230,7 @@ public class GameManager : Singleton<GameManager>
                 MuereJugador();
             else
             {
-                if (onPlayerDamaged != null)
-                    onPlayerDamaged();
+                onPlayerDamaged?.Invoke();
             }
 
         }
@@ -241,8 +241,7 @@ public class GameManager : Singleton<GameManager>
     void MuereJugador()
     {
         Vidas--;
-        if (onPlayerdied != null)
-            onPlayerdied();
+        onPlayerdied?.Invoke();
         GetComponent<AudioSource>().PlayOneShot(sndJugadorMuere, 1);
         if (Vidas != 0)
         {
@@ -261,19 +260,13 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    public void CargarMisiles()
-    {
-        stockMisiles += 10;
-    }
-
-
+    public void CargarMisiles() => stockMisiles += 10;
 
     public void AunVivo()
     {
         blInvulnerable = false;
         VidaJugador = VidaInicial;
-        if (onRespawn != null)
-            onRespawn();
+        onRespawn?.Invoke() ;
     }
 
 
@@ -287,29 +280,17 @@ public class GameManager : Singleton<GameManager>
         if (EscenaActual!=0)
             GetComponent<AudioSource>().PlayOneShot(sndJugadorFesteja, 1);
         EscenaActual++;
-
-
     }
-
-    public void SacudirCamara(float tiempo)
-    {
-        tpoSacudida = tiempo;
-    }
-
-
 
     public void IniciarPartida()
     {
         blTutorial = false;
         blGameOn = true;
-        if (onStartGame != null)
-            onStartGame();
+        onStartGame?.Invoke();
     }
 
-    public void Quit()
-    {
-        Application.Quit();
-    }
+    public void Quit() => Application.Quit();
+    
 
     public void AddVida(int cuanto)
     {
@@ -321,12 +302,21 @@ public class GameManager : Singleton<GameManager>
 
     public void AddPlusDmg()
     {
-        basicBullerDmg *= 2;
+        basicBulletDmg *= 2;
+        blPlusDMG = true;
         Invoke("RemovePlusDmg", 10f);
     }
     public void RemovePlusDmg()
     {
-        basicBullerDmg *= 0.5f;
+        basicBulletDmg *= 0.5f;
+        blPlusDMG = (basicBulletDmg != defaultBulletDamage);
+    }
+
+
+    public void SoltarPowerUp(Vector3 pos)
+    {
+        if (blGameOn)
+            _PowerUpDispenser.dropPowerUp(pos);
     }
 }
 

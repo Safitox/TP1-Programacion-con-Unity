@@ -20,7 +20,9 @@ public class FPSJugadorController : MonoBehaviour
     Transform poolBalas;
     [SerializeField] GameObject pf_Bala;
     [SerializeField] GameObject pf_Misil;
+    [SerializeField] GameObject PlusDmgVisual;
     [SerializeField] Transform puntaArma;
+    [SerializeField] Transform puntaMisil;
     [SerializeField] Camera cam;
     [SerializeField] Transform anclajeCabeza;
     [SerializeField] GameObject Arma;
@@ -39,17 +41,25 @@ public class FPSJugadorController : MonoBehaviour
 
     private void Awake()
     {
-        poolBalas = GameObject.Find("poolBalasJugador").transform;
+        DontDestroyOnLoad(gameObject);
+        PlusDMG(false);
+
     }
 
     private void OnEnable()
     {
+        poolBalas = GameObject.Find("poolBalasJugador").transform;
         GameManager.Instance.OnCambioEstadoTutorial += EstadoTutorial;
+        GameManager.Instance.onRestart += killMe;
+        GameManager.Instance.OnPlusDMG += PlusDMG;
+
     }
 
     private void OnDisable()
     {
         GameManager.Instance.OnCambioEstadoTutorial -= EstadoTutorial;
+        GameManager.Instance.onRestart -= killMe;
+        GameManager.Instance.OnPlusDMG -= PlusDMG;
     }
 
     void EstadoTutorial(bool OnOff)
@@ -144,7 +154,7 @@ public class FPSJugadorController : MonoBehaviour
                 //                Debug.DrawLine(puntaArma.position, objetivo, Color.red ,3f);
                 GameObject _bala = GenerarMisil();
                 _bala.SetActive(true);
-                _bala.transform.position = puntaArma.position;
+                _bala.transform.position = puntaMisil.position;
                 _bala.transform.forward = objetivo.normalized;
                 _bala.GetComponent<Rigidbody>().AddForce((objetivo - puntaArma.position).normalized * velocidadMisil, ForceMode.Impulse);
                 GameManager.Instance.stockMisiles--;
@@ -163,7 +173,7 @@ public class FPSJugadorController : MonoBehaviour
     }
 
 
-
+    void PlusDMG(bool status) => PlusDmgVisual.SetActive(status);
     GameObject GenerarBala()
     {
         foreach (GameObject ro in balasjugador)
@@ -226,6 +236,6 @@ public class FPSJugadorController : MonoBehaviour
     }
 
 
-    
-    
+    void killMe() => Destroy(this.gameObject);
+
 }

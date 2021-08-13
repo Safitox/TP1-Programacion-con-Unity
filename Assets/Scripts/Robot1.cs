@@ -22,19 +22,20 @@ public class Robot1 : MonoBehaviour
     [SerializeField] AudioClip sndImpacto;
     public bool blDisparar = false;
     private Animator anim;
+    [SerializeField] float chancePowerUp = 0f;
 
     [Header("Audio")]
     [SerializeField]
     AudioClip sndDisparo;
     [SerializeField]
     AudioClip[] sndActivar;
-    private AudioSource audio;
+    private AudioSource _audio;
 
 
     void Start()
     {
         Cabeza = transform.GetChild(0);
-        audio = GetComponent<AudioSource>();
+        _audio = GetComponent<AudioSource>();
     }
 
 
@@ -74,7 +75,7 @@ public class Robot1 : MonoBehaviour
         blDisparar = true;
         blmovible = true;
         cara.material.color = Color.red;
-        audio.PlayOneShot(sndActivar[UnityEngine.Random.Range(0, sndActivar.Length)]);
+        _audio.PlayOneShot(sndActivar[UnityEngine.Random.Range(0, sndActivar.Length)]);
     }
 
 
@@ -93,9 +94,9 @@ public class Robot1 : MonoBehaviour
     {
         if (pars[0].ToString() == "bala")
         {
-            vida -= GameManager.Instance.basicBullerDmg * float.Parse(pars[1].ToString());
+            vida -= GameManager.Instance.basicBulletDmg * float.Parse(pars[1].ToString());
             if (sndImpacto)
-                audio.PlayOneShot(sndImpacto, 1f);
+                _audio.PlayOneShot(sndImpacto, 1f);
             EvaluarVida();
 
         }
@@ -113,8 +114,10 @@ public class Robot1 : MonoBehaviour
         if (vida<=0)
         {
             SCMAN.ActivarNuevoRobotDestruido(transform);
-            audio.Stop();
+            _audio.Stop();
             blDisparar = false;
+            if (UnityEngine.Random.Range(0, 100) <= chancePowerUp)
+                GameManager.Instance.SoltarPowerUp(transform.position);
             gameObject.SetActive(false);
         }
     
@@ -123,7 +126,6 @@ public class Robot1 : MonoBehaviour
 
     void Disparar()
     {
-
         if (!blDisparar)
             return;
         GameObject _bala = SCMAN.GenerarBalaEnemiga();
@@ -136,9 +138,8 @@ public class Robot1 : MonoBehaviour
         _bala.transform.position = canon2.position;
         _bala.transform.rotation = canon2.rotation;
         _bala.GetComponent<Rigidbody>().AddForce((transform.forward) * velocidadBala);
-        if (GetComponent<AudioSource>().enabled )
-            GetComponent<AudioSource>().PlayOneShot(sndDisparo, 0.3f);
+        if (_audio.enabled )
+            _audio.PlayOneShot(sndDisparo, 0.3f);
         Invoke("Disparar", UnityEngine.Random.Range(1f, 3f));
     }
-
 }

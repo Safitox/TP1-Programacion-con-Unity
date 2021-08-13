@@ -7,7 +7,7 @@ public class SceneManager2 : MonoBehaviour
     [Header("GameObjects")]
     [SerializeField] Transform poolBalas;
     public List<GameObject> Bombas = new List<GameObject>();
-    [SerializeField] Transform Jugador;
+    Transform Jugador;
     [SerializeField] Transform spawnJugador;
 
     [SerializeField] Transform rotador;
@@ -43,6 +43,11 @@ public class SceneManager2 : MonoBehaviour
     {
         if (blRotar)
             rotador.Rotate(0,  15 * Time.deltaTime,0); 
+    }
+
+    private void Awake()
+    {
+        Jugador = GameManager.Instance.jugador;
     }
 
     private void OnEnable()
@@ -97,7 +102,8 @@ public class SceneManager2 : MonoBehaviour
             {
                 if (go.CompareTag("salvadora"))
                 {
-                    go.GetComponent<Rigidbody>().isKinematic = Activar;
+                    if (go.GetComponent<Rigidbody>())
+                        go.GetComponent<Rigidbody>().isKinematic = Activar;
                  }
                 else if (!go.GetComponent<BombaRotadora>().Activa)
                     go.GetComponent<Rigidbody>().isKinematic = Activar;
@@ -117,7 +123,7 @@ public class SceneManager2 : MonoBehaviour
 
     void SoltarBomba()
     {
-        if (!blGameOn)
+        if (!blGameOn )
             return;
         switch (stage)
         {
@@ -127,6 +133,7 @@ public class SceneManager2 : MonoBehaviour
                 bombaAway.GetComponent<Rigidbody>().isKinematic = false;
                 bombaAway.GetComponent<SphereCollider>().enabled = false;
                 bombaAway.transform.SetParent(null);
+                proximabomba = null;
                 stage++;
                 Invoke("SoltarBomba", 0.7f);
                 break;
