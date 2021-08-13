@@ -211,7 +211,6 @@ public class FPSJugadorController : MonoBehaviour
         else if (collision.gameObject.CompareTag("bala"))
         {
             GameManager.Instance.JugadorTocado(1);
-          //  GetComponent<AudioSource>().PlayOneShot(sndOuch, 0.3f);
         }
         else if (collision.gameObject.CompareTag("salida"))
         {

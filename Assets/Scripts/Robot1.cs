@@ -93,7 +93,7 @@ public class Robot1 : MonoBehaviour
     {
         if (pars[0].ToString() == "bala")
         {
-            vida -= 2 * float.Parse(pars[1].ToString());
+            vida -= GameManager.Instance.basicBullerDmg * float.Parse(pars[1].ToString());
             if (sndImpacto)
                 audio.PlayOneShot(sndImpacto, 1f);
             EvaluarVida();

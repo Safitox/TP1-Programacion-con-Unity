@@ -18,7 +18,6 @@ public class bala : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        //     Debug.Log(collision.gameObject.name);
         if (blExplosiva)
             GameManager.Instance.Explosion(transform.position);
         GetComponent<Rigidbody>().velocity = Vector3.zero;

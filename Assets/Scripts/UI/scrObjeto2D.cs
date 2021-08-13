@@ -14,6 +14,8 @@ public class scrObjeto2D : MonoBehaviour
     private void FixedUpdate()
     {
 
+        if (!jugador)
+            return;
         Visibilidad((transform.position - jugador.position).sqrMagnitude <= 100);
             Vector3 targetPostition = new Vector3(jugador.position.x,
                         this.transform.position.y,

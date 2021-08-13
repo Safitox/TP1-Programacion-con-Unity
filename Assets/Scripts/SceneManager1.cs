@@ -60,6 +60,7 @@ public class SceneManager1 : MonoBehaviour
         GameManager.Instance.OnCambioEstadoTutorial += EstadoTutorial;
         GameManager.Instance.OnCambioEstadoGame += EstadoGame;
         GameManager.Instance.onRespawn += Respawn;
+        GameManager.Instance.onPlayerdied += MurioElJugador;
     }
 
     private void OnDisable()
@@ -67,6 +68,7 @@ public class SceneManager1 : MonoBehaviour
         GameManager.Instance.OnCambioEstadoTutorial -= EstadoTutorial;
         GameManager.Instance.OnCambioEstadoGame -= EstadoGame;
         GameManager.Instance.onRespawn -= Respawn;
+        GameManager.Instance.onPlayerdied -= MurioElJugador;
     }
 
     private void EstadoGame(bool OnOff)

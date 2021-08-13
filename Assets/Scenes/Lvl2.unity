@@ -2117,11 +2117,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Escenas: []
-  Vidas: 3
+  VidasIniciales: 3
   VidaInicial: 20
-  VidaJugador: 20
+  _VidaJugador: 0
   EscenaActual: 0
-  stockMisiles: 10
+  _stockMisiles: 0
+  volMusica: 0.2
+  basicBullerDmg: 1
   poolExplosiones: {fileID: 0}
   pf_Explosion1: {fileID: 2319305712598874415, guid: 9c35365dd86934e4dae8a68dbf47a722,
     type: 3}
@@ -2130,8 +2132,7 @@ MonoBehaviour:
   uiDamage: {fileID: 0}
   obSCMAN: {fileID: 0}
   jugador: {fileID: 0}
-  txtVida: {fileID: 0}
-  txtMisiles: {fileID: 0}
+  canvasJuego: {fileID: 0}
   sndJugadorFesteja: {fileID: 0}
   "sndJugadorMuyDa\xF1ado": {fileID: 0}
   sndJugadorMuere: {fileID: 0}
@@ -3801,7 +3802,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1127672276
 MonoBehaviour:
   m_ObjectHideFlags: 0

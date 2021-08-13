@@ -13,14 +13,16 @@ public class GameManager : Singleton<GameManager>
 
     [Header("Variables")]
     [SerializeField]
-    int Vidas = 3;
-    public int VidaInicial = 20;
-    public int VidaJugador = 20;
+    private int VidasIniciales = 3;
+    private int _Vidas =0;
+    public float VidaInicial = 20;
+    public float _VidaJugador = 0;
     public int EscenaActual = 0;
     bool blInvulnerable=false;
     float tpoSacudida=0;
-    public int stockMisiles = 10;
+    public int _stockMisiles = -1;
     public float volMusica = 0.2f;
+    public float basicBullerDmg = 1f;
    // private bool blTutorial = false;
 
     [Header("GameObjects")]
@@ -34,16 +36,13 @@ public class GameManager : Singleton<GameManager>
     [SerializeField]
     GameObject pf_CajaMunicion;
 
-    [SerializeField] GameObject uiDamage;
 
     [Header("Referencias")]
     [SerializeField] GameObject obSCMAN;
     public Transform jugador;
 
     [Header("UI")]
-    [SerializeField] TMPro.TextMeshProUGUI txtVida;
-    [SerializeField] TMPro.TextMeshProUGUI txtMisiles;
-    GameObject UIMuerto;
+    [SerializeField] GameObject canvasJuego;
 
     [Header("Sonidos")]
     [SerializeField] AudioClip sndJugadorFesteja;
@@ -55,12 +54,17 @@ public class GameManager : Singleton<GameManager>
     public Action onStartGame;
     public Action onPlayerDamaged;
     public Action onRespawn;
+    public Action onPlayerdied;
+    public Action onRestart;
     private bool _blTutorial = false;
     private bool _blGameOn = false;
-    public event OnVariableChangeDelegate OnCambioEstadoTutorial;
-    public event OnVariableChangeDelegate OnCambioEstadoGame;
-    public delegate void OnVariableChangeDelegate(bool newVal);
+    public Action<bool> OnCambioEstadoTutorial;
+    public Action<bool> OnCambioEstadoGame;
+    public Action<int>  OnCambioVidas;
+    public Action<int> OnCambioMisiles;
+    public Action<float> OnCambioVidaJugador ;
 
+    #region EventosVariables
     public bool blTutorial
     {
         get
@@ -89,9 +93,50 @@ public class GameManager : Singleton<GameManager>
                 OnCambioEstadoGame(_blGameOn);
         }
     }
+    public int Vidas
+    {
+        get
+        {
+            return _Vidas;
+        }
+        set
+        {
+            if (_Vidas == value) return;
+            _Vidas = value;
+            if (OnCambioVidas != null)
+                OnCambioVidas(_Vidas);
+        }
+    }
+    public int stockMisiles
+    {
+        get
+        {
+            return _stockMisiles;
+        }
+        set
+        {
+            if (_stockMisiles == value) return;
+            _stockMisiles = value;
+            if (OnCambioMisiles != null)
+                OnCambioMisiles(_stockMisiles);
+        }
+    }
+    public float VidaJugador
+    {
+        get
+        {
+            return _VidaJugador;
+        }
+        set
+        {
+            if (_VidaJugador == value) return;
+            _VidaJugador = value;
+            if (OnCambioVidaJugador != null)
+                OnCambioVidaJugador(_VidaJugador / VidaInicial);
+        }
+    }
 
-
-
+    #endregion
 
     public int chequeo = 0;
 
@@ -99,7 +144,9 @@ public class GameManager : Singleton<GameManager>
     {
 
         VidaJugador = 20;
+    //    canvasJuego.SetActive(false);
         SceneManager.sceneLoaded += OnSceneLoaded;
+
 
     }
 
@@ -124,33 +171,29 @@ public class GameManager : Singleton<GameManager>
 
     }
 
-    private void FixedUpdate()
-    {
-        if (EscenaActual != 0)
-            txtVida.text = VidaJugador.ToString() + "-- ( " + new string('|', Vidas) + " )"; 
-        if (EscenaActual==4)
-            txtMisiles.text = "Misiles (E) - " + new string('X', stockMisiles);
-
-    }
-
-
-
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        //canvasJuego.SetActive(EscenaActual != 0);
         if (EscenaActual != 0)
         {
-            txtVida = GameObject.Find("UITXTvida").GetComponent<TMPro.TextMeshProUGUI>();
+            
+            CancelInvoke();
+            basicBullerDmg = 1f;
             obSCMAN = GameObject.Find("SceneManager");
             poolExplosiones = GameObject.Find("poolExplosiones").transform;
-            uiDamage = GameObject.Find("UIDamage");
-            UIMuerto = GameObject.Find("UIMuerto");
-            UIMuerto.SetActive(false);
             jugador = GameObject.FindGameObjectWithTag("Player").transform;
             Explosiones.Clear();
             VidaJugador = VidaInicial;
-            if (EscenaActual==4)
-                txtMisiles = GameObject.Find("UITXTmisiles").GetComponent<TMPro.TextMeshProUGUI>();
+            stockMisiles = 0;
+            if (EscenaActual == 4)
+                stockMisiles = 3;
+            else if (EscenaActual == 1)
+            {
+                Vidas = VidasIniciales;
+                VidaJugador = VidaInicial;
+            }
         }
+        
     }
 
 
@@ -182,7 +225,6 @@ public class GameManager : Singleton<GameManager>
         if (!blInvulnerable)
         {
             VidaJugador -= damage;
-            uiDamage.GetComponent<Animator>().SetTrigger("ouch");
             if (VidaJugador <= 0)
                 MuereJugador();
             else
@@ -198,9 +240,9 @@ public class GameManager : Singleton<GameManager>
 
     void MuereJugador()
     {
-        UIMuerto.SetActive(true);
-        obSCMAN.SendMessage("MurioElJugador");
         Vidas--;
+        if (onPlayerdied != null)
+            onPlayerdied();
         GetComponent<AudioSource>().PlayOneShot(sndJugadorMuere, 1);
         if (Vidas != 0)
         {
@@ -210,7 +252,12 @@ public class GameManager : Singleton<GameManager>
         }
         else
         {
-            Application.Quit();
+            if (onRestart != null)
+                onRestart();
+            EscenaActual = 0;
+            Cursor.lockState = CursorLockMode.None;
+
+            SceneManager.LoadScene(0);
         }
     }
 
@@ -224,7 +271,6 @@ public class GameManager : Singleton<GameManager>
     public void AunVivo()
     {
         blInvulnerable = false;
-        UIMuerto.SetActive(false);
         VidaJugador = VidaInicial;
         if (onRespawn != null)
             onRespawn();
@@ -265,5 +311,22 @@ public class GameManager : Singleton<GameManager>
         Application.Quit();
     }
 
+    public void AddVida(int cuanto)
+    {
+        VidaJugador += cuanto;
+        if (VidaJugador > VidaInicial)
+            VidaJugador = VidaInicial;
+
+    }
+
+    public void AddPlusDmg()
+    {
+        basicBullerDmg *= 2;
+        Invoke("RemovePlusDmg", 10f);
+    }
+    public void RemovePlusDmg()
+    {
+        basicBullerDmg *= 0.5f;
+    }
 }
 
