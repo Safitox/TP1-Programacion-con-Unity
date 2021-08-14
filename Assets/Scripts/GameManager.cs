@@ -66,6 +66,7 @@ public class GameManager : Singleton<GameManager>
     public Action<int>  OnCambioVidas;
     public Action<int> OnCambioMisiles;
     public Action<float> OnCambioVidaJugador ;
+    public Action OnPressEscape;
 
     #region EventosVariables
     public bool blTutorial
@@ -172,6 +173,10 @@ public class GameManager : Singleton<GameManager>
                 blGameOn = true;
             }
         }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            OnPressEscape?.Invoke();
+        }
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -187,6 +192,7 @@ public class GameManager : Singleton<GameManager>
             Explosiones.Clear();
             VidaJugador = VidaInicial;
             stockMisiles = 0;
+            jugador.GetComponent<FPSJugadorController>().blSaltoHabilitado = (EscenaActual != 2);
             if (EscenaActual == 4)
                 stockMisiles = 3;
             else if (EscenaActual == 1)
@@ -245,19 +251,20 @@ public class GameManager : Singleton<GameManager>
         GetComponent<AudioSource>().PlayOneShot(sndJugadorMuere, 1);
         if (Vidas != 0)
         {
-            GameObject.Instantiate(pf_Muerto,  jugador.position, jugador.rotation);
+            GameObject.Instantiate(pf_Muerto, jugador.position, jugador.rotation);
             blInvulnerable = true;
             Invoke("AunVivo", 5f);
         }
         else
-        {
-            if (onRestart != null)
-                onRestart();
-            EscenaActual = 0;
-            Cursor.lockState = CursorLockMode.None;
+            Restart();
+    }
 
-            SceneManager.LoadScene(0);
-        }
+    public void Restart()
+    {
+        onRestart?.Invoke();
+        EscenaActual = 0;
+        Cursor.lockState = CursorLockMode.None;
+        SceneManager.LoadScene(0);
     }
 
     public void CargarMisiles() => stockMisiles += 10;

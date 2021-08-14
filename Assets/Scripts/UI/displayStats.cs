@@ -56,5 +56,6 @@ public class displayStats : MonoBehaviour
     void RespawnJugador() => UIMuerto.SetActive(false);
     void killMe() => Destroy(this.gameObject);
     void Damaged() => UIDamaged.SetTrigger("ouch");
-
+    public void butSalir() => GameManager.Instance.Quit();
+    public void butMenu() => GameManager.Instance.Restart();
 }

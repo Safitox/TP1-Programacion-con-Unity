@@ -26,6 +26,7 @@ public class FPSJugadorController : MonoBehaviour
     [SerializeField] Camera cam;
     [SerializeField] Transform anclajeCabeza;
     [SerializeField] GameObject Arma;
+    public bool blSaltoHabilitado = true;
     bool blArmaActiva = true;
     [SerializeField] AudioClip sndOuch;
     Vector3 centroRef = new Vector3(0.5f, 0.5f, 0f);
@@ -71,7 +72,7 @@ public class FPSJugadorController : MonoBehaviour
     {
         velocity.y = Input.GetAxis("Vertical") * speed * Time.deltaTime;
         velocity.x = Input.GetAxis("Horizontal") * speed * Time.deltaTime;
-        if (Input.GetKeyDown(KeyCode.Space) && (Time.timeSinceLevelLoad - timerSalto) > 1)
+        if (Input.GetKeyDown(KeyCode.Space) && (Time.timeSinceLevelLoad - timerSalto) > 2.3f)
         {
             rb.AddForce(Vector3.up * 100 * fuerzaSalto);
             timerSalto = Time.timeSinceLevelLoad;

@@ -1241,7 +1241,8 @@ MonoBehaviour:
   EscenaActual: 4
   _stockMisiles: -1
   volMusica: 0.2
-  basicBullerDmg: 1
+  basicBulletDmg: 1
+  defaultBulletDamage: 0
   poolExplosiones: {fileID: 0}
   pf_Explosion1: {fileID: 2319305712598874415, guid: 9c35365dd86934e4dae8a68dbf47a722,
     type: 3}
@@ -2453,7 +2454,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1436847699
 MonoBehaviour:
   m_ObjectHideFlags: 0

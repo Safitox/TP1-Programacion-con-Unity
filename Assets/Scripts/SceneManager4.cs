@@ -27,24 +27,45 @@ public class SceneManager4 : MonoBehaviour
     GameObject pf_enemigo;
     [SerializeField]
     GameObject pf_cajas;
-    // Start is called before the first frame update
+
     void Start()
     {
-
         if (SM != null)
             GameObject.Destroy(SM);
         else
             SM = this;
         Victoria.SetActive(false);
-        jugador = GameObject.FindGameObjectWithTag("Player").transform;
+        jugador = GameManager.Instance.jugador;
         poolBalas = GameObject.Find("poolBalasJugador").transform;
-
-        SpawnearJugador();
     }
 
+    private void OnEnable()
+    {
+        GameManager.Instance.OnCambioEstadoTutorial += EstadoTutorial;
+        GameManager.Instance.OnCambioEstadoGame += EstadoGame;
+        GameManager.Instance.onRespawn += Respawn;
+        GameManager.Instance.onPlayerdied += MurioElJugador;
 
+    }
 
-    
+    private void OnDisable()
+    {
+        GameManager.Instance.OnCambioEstadoTutorial -= EstadoTutorial;
+        GameManager.Instance.OnCambioEstadoGame -= EstadoGame;
+        GameManager.Instance.onRespawn -= Respawn;
+        GameManager.Instance.onPlayerdied += MurioElJugador;
+
+    }
+
+    void EstadoTutorial(bool OnOff)
+    {
+
+    }
+
+    void EstadoGame(bool OnOff)
+    {
+
+    }
 
     public void SpawnearUno()
     {
@@ -101,22 +122,17 @@ public class SceneManager4 : MonoBehaviour
 
 
 
-    public void ActivarNuevoRobotDestruido(Transform original)
-    {
-
-        GameManager.Instance.Explosion (original.position);
-
-    }
+    public void ActivarNuevoRobotDestruido(Transform original) => GameManager.Instance.Explosion (original.position);
 
     public void MurioElJugador()
     {
             //reservado
     }
 
-    public void SpawnearJugador()
+    public void Respawn()
     {
         jugador.position = spawnJugador.position;
-        GameManager.Instance.stockMisiles = 2;
+        GameManager.Instance.stockMisiles = 3;
 
     }
 
