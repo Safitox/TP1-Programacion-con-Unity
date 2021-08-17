@@ -66,13 +66,14 @@ public class FPSJugadorController : MonoBehaviour
     void EstadoTutorial(bool OnOff)
     {
         blTutorial = OnOff;
+        timerSalto = 0;
     }
 
     void Update()
     {
         velocity.y = Input.GetAxis("Vertical") * speed * Time.deltaTime;
         velocity.x = Input.GetAxis("Horizontal") * speed * Time.deltaTime;
-        if (Input.GetKeyDown(KeyCode.Space) && (Time.timeSinceLevelLoad - timerSalto) > 2.3f)
+        if (Input.GetKeyDown(KeyCode.Space) && (Time.timeSinceLevelLoad - timerSalto) > 1.5f)
         {
             rb.AddForce(Vector3.up * 100 * fuerzaSalto);
             timerSalto = Time.timeSinceLevelLoad;
