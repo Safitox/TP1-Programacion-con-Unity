@@ -34,6 +34,12 @@ public class MecaShrek : MonoBehaviour
         lr2.enabled = false;
     }
 
+    private void Awake()
+    {
+        jugador = GameManager.Instance.jugador;
+
+    }
+
     private void FixedUpdate()
     {
         if (blLaserOn)
@@ -85,8 +91,8 @@ public class MecaShrek : MonoBehaviour
     {
         blInvulnerable = false;
         spawner.SetActive(true);
-        SceneManager4.SM.SpawnearUno();
         Invoke("Burro", 5f);
+        SceneManager4.SM.MechaShrekOn = true;
 
     }
 
@@ -149,6 +155,11 @@ public class MecaShrek : MonoBehaviour
     {
         if (explosDer == 3 && explosIzq == 3)
             SceneManager4.SM.Victorioso();
+    }
+
+    public void Temblar()
+    {
+
     }
 
 

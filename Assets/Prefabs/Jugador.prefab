@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2605160917258385348}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: AnclajeCabeza
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4986901739469311699}
   - component: {fileID: 885968680365119609}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: VisualPlusDMG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -90,7 +90,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 652483711165132658}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: puntaMisil
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -120,7 +120,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8936246548191262385}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: puntaArma
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -153,7 +153,7 @@ GameObject:
   - component: {fileID: 8936246548220125214}
   - component: {fileID: 8936246548220125215}
   - component: {fileID: 8936246548220125208}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -258,7 +258,7 @@ GameObject:
   - component: {fileID: 8936246548332391368}
   - component: {fileID: 8936246548332391369}
   - component: {fileID: 8936246548332391371}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Jugador
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -386,6 +386,7 @@ MonoBehaviour:
   cam: {fileID: 8936246548220125214}
   anclajeCabeza: {fileID: 2605160917258385348}
   Arma: {fileID: 2305230610644902397}
+  blSaltoHabilitado: 1
   sndOuch: {fileID: 0}
 --- !u!82 &8936246548332391371
 AudioSource:
@@ -493,7 +494,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8936246548549021972}
   - component: {fileID: 8936246548549021975}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Spot Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -657,6 +658,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: lightning
       objectReference: {fileID: 0}
+    - target: {fileID: 7125278127448372730, guid: 797708d28c160274da9e4286970acd21,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 797708d28c160274da9e4286970acd21, type: 3}
 --- !u!4 &6153040169657824780 stripped
@@ -675,6 +681,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 0cd7bb6bdf7d49a4289c861763122d06, type: 3}
       propertyPath: m_Name
       value: weapon03
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 0cd7bb6bdf7d49a4289c861763122d06, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 0cd7bb6bdf7d49a4289c861763122d06, type: 3}
       propertyPath: m_RootOrder
@@ -761,6 +771,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 995c252f2767fe840920e073859ff3a9, type: 3}
       propertyPath: m_Name
       value: weapon04
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 995c252f2767fe840920e073859ff3a9, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 995c252f2767fe840920e073859ff3a9, type: 3}
       propertyPath: m_RootOrder

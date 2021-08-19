@@ -8,16 +8,18 @@ public class SceneManager4 : MonoBehaviour
     public Transform poolRobots1;
     Transform poolBalas;
     List<GameObject> robots1 = new List<GameObject>();
+    List<GameObject> robots3 = new List<GameObject>();
     List<GameObject> poolCajas = new List<GameObject>();
+    [SerializeField] List<Transform> spawners = new List<Transform>();
+
     [SerializeField]
     Transform spawnJugador;
     [SerializeField] Transform Spawner;
     public static SceneManager4 SM;
-    [SerializeField] GameObject Victoria;
-
-
 
     Transform jugador;
+    private bool playing = false;
+    public bool MechaShrekOn = false;
 
     [Header("Variables")]
 
@@ -25,6 +27,8 @@ public class SceneManager4 : MonoBehaviour
     [Header("prefabs/materiales")]
     [SerializeField] 
     GameObject pf_enemigo;
+    [SerializeField]
+    GameObject pf_robot3;
     [SerializeField]
     GameObject pf_cajas;
 
@@ -34,9 +38,9 @@ public class SceneManager4 : MonoBehaviour
             GameObject.Destroy(SM);
         else
             SM = this;
-        Victoria.SetActive(false);
         jugador = GameManager.Instance.jugador;
         poolBalas = GameObject.Find("poolBalasJugador").transform;
+        SpawnearUno();
     }
 
     private void OnEnable()
@@ -64,13 +68,17 @@ public class SceneManager4 : MonoBehaviour
 
     void EstadoGame(bool OnOff)
     {
-
+        playing = OnOff;
     }
 
     public void SpawnearUno()
     {
-        if (Spawner.gameObject.activeInHierarchy)
-            ActivarNuevoRobot();
+      //  if (playing)
+        {
+            if (MechaShrekOn)
+                ActivarNuevoRobot();
+            ActivarNuevoRobot3();
+        }
         Invoke("SpawnearUno", Random.Range(7f, 12f));
     }
 
@@ -82,6 +90,27 @@ public class SceneManager4 : MonoBehaviour
         enemigo.SetActive(true);
         enemigo.transform.position = Spawner.position;
     }
+
+
+    void ActivarNuevoRobot3()
+    {
+        float maxdist = 0;
+        int spSeleccionado = 0;
+        for (int i = 0; i < spawners.Count; i++)
+        {
+                if ((spawners[i].transform.position - jugador.position).sqrMagnitude > maxdist)
+                {
+                    spSeleccionado = i;
+                    maxdist = (spawners[i].transform.position - jugador.position).sqrMagnitude;
+                }
+
+        }
+        GameObject enemigo = GenerarRobot3(true);
+        enemigo.transform.position = spawners[spSeleccionado].position;
+        enemigo.SetActive(true);
+
+    }
+
 
 
 
@@ -103,6 +132,23 @@ public class SceneManager4 : MonoBehaviour
         robots1.Add( go);
         return go;
     }
+
+    public GameObject GenerarRobot3(bool Activar = true)
+    {
+        foreach (GameObject ro in robots3)
+        {
+            if (!ro.activeInHierarchy)
+            {
+                return ro;
+            }
+        }
+
+        GameObject go = Instantiate(pf_robot3);
+        go.SetActive(Activar);
+        robots3.Add(go);
+        return go;
+    }
+
 
 
     public GameObject GenerarCaja()
@@ -138,7 +184,6 @@ public class SceneManager4 : MonoBehaviour
 
     public void Victorioso()
     {
-        Victoria.SetActive(true);
         GameManager.Instance.VidaJugador = 50000;
         Time.timeScale = 0;
     }
