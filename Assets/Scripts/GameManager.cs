@@ -67,6 +67,8 @@ public class GameManager : Singleton<GameManager>
     public Action<int> OnCambioMisiles;
     public Action<float> OnCambioVidaJugador ;
     public Action OnPressEscape;
+    public Action onPause;
+    public Action onContinue;
 
     #region EventosVariables
     public bool blTutorial
@@ -176,6 +178,9 @@ public class GameManager : Singleton<GameManager>
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             OnPressEscape?.Invoke();
+            if (EscenaActual!=0)
+                Pause();
+               
         }
     }
 
@@ -263,7 +268,8 @@ public class GameManager : Singleton<GameManager>
     {
         onRestart?.Invoke();
         EscenaActual = 0;
-        Cursor.lockState = CursorLockMode.None;
+        Resume();
+        CursorLock(false);
         SceneManager.LoadScene(0);
     }
 
@@ -280,6 +286,7 @@ public class GameManager : Singleton<GameManager>
     public void PASEDENIVEL(int overrider=0)
     {
         blTutorial = true;
+        CursorLock(true);
         blGameOn = false;
         if (overrider != 0)
             EscenaActual = overrider-1;
@@ -324,6 +331,29 @@ public class GameManager : Singleton<GameManager>
     {
         if (blGameOn)
             _PowerUpDispenser.dropPowerUp(pos);
+    }
+
+    public void Pause()
+    {
+        Time.timeScale = 0;
+        CursorLock(false);
+        onPause?.Invoke();
+    }
+    public void Resume()
+    {
+        Time.timeScale = 1;
+        CursorLock(true);
+        onContinue?.Invoke();
+    }
+
+    void CursorLock(bool OnOff)
+    {
+        if (OnOff)
+            Cursor.lockState = CursorLockMode.Locked;
+        else
+            Cursor.lockState = CursorLockMode.None;
+
+
     }
 }
 

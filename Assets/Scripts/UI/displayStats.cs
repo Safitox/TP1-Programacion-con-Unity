@@ -9,13 +9,14 @@ public class displayStats : MonoBehaviour
     [SerializeField] Image imgVida;
     [SerializeField] TMPro.TextMeshProUGUI txtMisiles;
     [SerializeField] GameObject UIMuerto;
+    [SerializeField] GameObject UIPausa;
     [SerializeField] Animator UIDamaged;
 
     private void Start()
     {
-        UIMuerto.SetActive(false);            
+        UIMuerto.SetActive(false);
+        UIPausa.SetActive(false);
         txtMisiles.gameObject.SetActive(false);
-
     }
 
     private void Awake() => DontDestroyOnLoad(gameObject);
@@ -24,22 +25,24 @@ public class displayStats : MonoBehaviour
     {
         GameManager.Instance.OnCambioVidaJugador += RefrescarVida;
         GameManager.Instance.OnCambioVidas += RefrescarVidas;
-        GameManager.Instance.OnCambioMisiles += RefrescarVidas;
+        GameManager.Instance.OnCambioMisiles += RefrescarMisiles;
         GameManager.Instance.onRestart += killMe;
         GameManager.Instance.onPlayerdied += MurioElJugador;
         GameManager.Instance.onRespawn += RespawnJugador;
         GameManager.Instance.onPlayerDamaged += Damaged;
+        GameManager.Instance.OnPressEscape += Pausa;
     }
 
     private void OnDisable()
     {
         GameManager.Instance.OnCambioVidaJugador -= RefrescarVida;
         GameManager.Instance.OnCambioVidas -= RefrescarVidas;
-        GameManager.Instance.OnCambioMisiles -= RefrescarVidas;
+        GameManager.Instance.OnCambioMisiles -= RefrescarMisiles;
         GameManager.Instance.onRestart -= killMe;
         GameManager.Instance.onPlayerdied -= MurioElJugador;
         GameManager.Instance.onRespawn -= RespawnJugador;
         GameManager.Instance.onPlayerDamaged -= Damaged;
+        GameManager.Instance.OnPressEscape -= Pausa;
     }
 
     void RefrescarVida(float valor) => imgVida.fillAmount = valor;
@@ -58,4 +61,12 @@ public class displayStats : MonoBehaviour
     void Damaged() => UIDamaged.SetTrigger("ouch");
     public void butSalir() => GameManager.Instance.Quit();
     public void butMenu() => GameManager.Instance.Restart();
+    public void butContinue()
+    {
+        UIPausa.SetActive(false);
+        GameManager.Instance.Resume();
+    }
+
+    void Pausa() => UIPausa.SetActive(true);
+
 }

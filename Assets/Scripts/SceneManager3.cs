@@ -57,7 +57,7 @@ public class SceneManager3 : MonoBehaviour
         GameManager.Instance.OnCambioEstadoTutorial -= EstadoTutorial;
         GameManager.Instance.OnCambioEstadoGame -= EstadoGame;
         GameManager.Instance.onRespawn -= Respawn;
-        GameManager.Instance.onPlayerdied += MurioElJugador;
+        GameManager.Instance.onPlayerdied -= MurioElJugador;
 
     }
     private void Respawn() => SpawnearJugador();

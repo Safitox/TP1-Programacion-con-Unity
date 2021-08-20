@@ -18,11 +18,20 @@ public class FPSJugadorCamara : MonoBehaviour
         character = transform.parent;
     }
 
-    void Start()
+    private void OnEnable()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        GameManager.Instance.onPause += Pausar;
+        GameManager.Instance.onContinue += Continuar;
     }
 
+    private void OnDisable()
+    {
+        GameManager.Instance.onPause -= Pausar;
+        GameManager.Instance.onContinue -= Continuar;
+    }
+
+    void Pausar() => Activar = false;
+    void Continuar() => Activar = true;
     void Update()
     {
         if (Activar)
