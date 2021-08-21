@@ -25,6 +25,7 @@ public class MecaShrek : MonoBehaviour
     bool blInvulnerable = true;
     Vector3 posAntiguaJugador;
     [SerializeField] AudioClip sndExplosionGrande;
+    public System.Action<Vector3> onScorch;
 
     void Start()
     {
@@ -76,8 +77,11 @@ public class MecaShrek : MonoBehaviour
             {
                 lr1.SetPosition(1, posAntiguaJugador);
                 lr2.SetPosition(1, posAntiguaJugador);
-                if (Random.Range(0, 2) == 1) 
+                if (Random.Range(0, 2) == 1)
+                {
                     GameManager.Instance.Explosion(posAntiguaJugador);
+                    onScorch?.Invoke(posAntiguaJugador);
+                }
             }
                 posAntiguaJugador = jugador.position;
             
