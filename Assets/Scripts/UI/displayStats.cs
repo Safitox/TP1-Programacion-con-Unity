@@ -9,13 +9,17 @@ public class displayStats : MonoBehaviour
     [SerializeField] Image imgVida;
     [SerializeField] TMPro.TextMeshProUGUI txtMisiles;
     [SerializeField] GameObject UIMuerto;
+    [SerializeField] GameObject UIGameOver;
     [SerializeField] GameObject UIPausa;
+    [SerializeField] GameObject UIVictoria;
     [SerializeField] Animator UIDamaged;
 
     private void Start()
     {
         UIMuerto.SetActive(false);
         UIPausa.SetActive(false);
+        UIVictoria.SetActive(false);
+        UIGameOver.SetActive(false);
         txtMisiles.gameObject.SetActive(false);
     }
 
@@ -31,6 +35,9 @@ public class displayStats : MonoBehaviour
         GameManager.Instance.onRespawn += RespawnJugador;
         GameManager.Instance.onPlayerDamaged += Damaged;
         GameManager.Instance.OnPressEscape += Pausa;
+        GameManager.Instance.onWin += Victoria;
+        GameManager.Instance.onDefeat += Defeat;
+
     }
 
     private void OnDisable()
@@ -43,17 +50,21 @@ public class displayStats : MonoBehaviour
         GameManager.Instance.onRespawn -= RespawnJugador;
         GameManager.Instance.onPlayerDamaged -= Damaged;
         GameManager.Instance.OnPressEscape -= Pausa;
+        GameManager.Instance.onWin -= Victoria;
+        GameManager.Instance.onDefeat -= Defeat;
+
     }
 
     void RefrescarVida(float valor) => imgVida.fillAmount = valor;
     void RefrescarVidas(int valor) => txtVidas.text = valor.ToString();
     void RefrescarMisiles(int valor)
     {
-        if (valor > 0)
+        if (GameManager.Instance.EscenaActual == 4)
         {
             txtMisiles.gameObject.SetActive(true);
             txtMisiles.text = valor.ToString();
         }
+
     }
     void MurioElJugador() => UIMuerto.SetActive(true);
     void RespawnJugador() => UIMuerto.SetActive(false);
@@ -69,4 +80,6 @@ public class displayStats : MonoBehaviour
 
     void Pausa() => UIPausa.SetActive(true);
 
+    void Victoria()=> UIVictoria.SetActive(true);
+    void Defeat() => UIGameOver.SetActive(true);
 }

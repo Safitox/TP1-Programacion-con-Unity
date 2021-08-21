@@ -19,12 +19,12 @@ public class Robot1 : MonoBehaviour
     SceneManager1 SCMAN;
     [SerializeField] Transform canon1;
     [SerializeField] Transform canon2;
-    [SerializeField] AudioClip sndImpacto;
     public bool blDisparar = false;
     private Animator anim;
     [SerializeField] float chancePowerUp = 0f;
 
     [Header("Audio")]
+    [SerializeField] AudioClip sndImpacto;
     [SerializeField]
     AudioClip sndDisparo;
     [SerializeField]
@@ -94,13 +94,16 @@ public class Robot1 : MonoBehaviour
     {
         if (pars[0].ToString() == "bala")
         {
-            vida -= GameManager.Instance.basicBulletDmg * float.Parse(pars[1].ToString());
             if (sndImpacto)
                 _audio.PlayOneShot(sndImpacto, 1f);
-            EvaluarVida();
+            if (blmovible)
+            {
+                vida -= GameManager.Instance.basicBulletDmg * float.Parse(pars[1].ToString());
+                EvaluarVida();
+            }
 
         }
-        else if (pars[0].ToString() == "exploder")
+        else if (pars[0].ToString() == "exploder" && blmovible)
         {
             vida -= 20 * float.Parse(pars[1].ToString());
             EvaluarVida();

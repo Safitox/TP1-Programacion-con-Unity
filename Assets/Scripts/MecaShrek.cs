@@ -41,6 +41,22 @@ public class MecaShrek : MonoBehaviour
 
     }
 
+    private void OnEnable()
+    {
+
+        GameManager.Instance.OnCambioEstadoGame += EstadoGame;
+
+
+    }
+
+    private void OnDisable()
+    {
+
+        GameManager.Instance.OnCambioEstadoGame -= EstadoGame;
+
+
+    }
+
     private void FixedUpdate()
     {
         if (blLaserOn)
@@ -48,6 +64,12 @@ public class MecaShrek : MonoBehaviour
             lr1.SetPosition(0, posLaser1.position);
             lr2.SetPosition(0, posLaser2.position);
         }
+    }
+
+    void EstadoGame(bool OnOff)
+    {
+        if (OnOff)
+            GetComponent<Animator>().SetTrigger("aparecer");
     }
 
         public void ActivarLaser()
@@ -93,6 +115,8 @@ public class MecaShrek : MonoBehaviour
 
     public void IniciarSpawner()
     {
+        if (GameManager.Instance.blTutorial)
+            return;
         blInvulnerable = false;
         spawner.SetActive(true);
         Invoke("Burro", 5f);
@@ -158,7 +182,7 @@ public class MecaShrek : MonoBehaviour
     void EvaluarVida()
     {
         if (explosDer == 3 && explosIzq == 3)
-            SceneManager4.SM.Victorioso();
+            GameManager.Instance.Victoria();
     }
 
     public void Temblar()

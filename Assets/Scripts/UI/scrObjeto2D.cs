@@ -25,9 +25,17 @@ public class scrObjeto2D : MonoBehaviour
 
     void Visibilidad(bool estado)
     {
-        if (visible !=estado)
-            transform.GetChild(0).GetComponent<Animator>().SetBool("aparecer", estado);
-        visible = estado;
+        if (visible != estado)
+        {
+            try
+            {
+                transform.GetChild(0).GetComponent<Animator>().SetBool("aparecer", estado);
+            }
+            catch
+            {
+            }
+            visible = estado;
+        }
 
     }
 }

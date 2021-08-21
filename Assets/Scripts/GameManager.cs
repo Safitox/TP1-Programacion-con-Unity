@@ -23,7 +23,6 @@ public class GameManager : Singleton<GameManager>
     public float volMusica = 0.2f;
     public float basicBulletDmg = 1f;
     [SerializeField] float defaultBulletDamage;
-   // private bool blTutorial = false;
 
     [Header("GameObjects")]
     [SerializeField]
@@ -38,7 +37,6 @@ public class GameManager : Singleton<GameManager>
 
 
     [Header("Referencias")]
-    [SerializeField] GameObject obSCMAN;
     public Transform jugador;
     private PowerUpDispenser _PowerUpDispenser;
 
@@ -50,6 +48,9 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] AudioClip sndJugadorMuyDañado;
     [SerializeField] AudioClip sndJugadorMuere;
     public AudioClip MusicaTutorial;
+    public AudioClip MusicaVictoria;
+    public AudioClip MusicaGameOver;
+    [SerializeField] AudioClip sndPowerUp;
 
     [Header("Acciones")]
     public Action onStartGame;
@@ -69,6 +70,9 @@ public class GameManager : Singleton<GameManager>
     public Action OnPressEscape;
     public Action onPause;
     public Action onContinue;
+    public Action onWin;
+    public Action onDefeat;
+    public Action onLevelChange;
 
     #region EventosVariables
     public bool blTutorial
@@ -135,6 +139,8 @@ public class GameManager : Singleton<GameManager>
         {
             if (_stockMisiles == value) return;
             _stockMisiles = value;
+            if (_stockMisiles > 20)
+                _stockMisiles = 20;
             if (OnCambioMisiles != null)
                 OnCambioMisiles(_stockMisiles);
         }
@@ -173,6 +179,7 @@ public class GameManager : Singleton<GameManager>
             {
                 blTutorial = false;
                 blGameOn = true;
+                IniciarPartida();
             }
         }
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -191,7 +198,6 @@ public class GameManager : Singleton<GameManager>
             CancelInvoke();
             basicBulletDmg = defaultBulletDamage;
             blPlusDMG = false;
-            obSCMAN = GameObject.Find("SceneManager");
             poolExplosiones = GameObject.Find("poolExplosiones").transform;
             jugador = GameObject.FindGameObjectWithTag("Player").transform;
             Explosiones.Clear();
@@ -291,6 +297,7 @@ public class GameManager : Singleton<GameManager>
         if (overrider != 0)
             EscenaActual = overrider-1;
         SceneManager.LoadScene(Escenas[EscenaActual],LoadSceneMode.Single);
+        onLevelChange?.Invoke();
         if (EscenaActual!=0)
             GetComponent<AudioSource>().PlayOneShot(sndJugadorFesteja, 1);
         EscenaActual++;
@@ -352,8 +359,22 @@ public class GameManager : Singleton<GameManager>
             Cursor.lockState = CursorLockMode.Locked;
         else
             Cursor.lockState = CursorLockMode.None;
-
-
     }
+
+    public void Victoria()
+    {
+        onWin?.Invoke();
+        VidaJugador = 5000;
+        Pause();
+    }
+
+    public void Defeat()
+    {
+        onDefeat?.Invoke();
+        VidaJugador = 5000;
+        Pause();
+    }
+
+    public void RecogerPowerUp() => GetComponent<AudioSource>().PlayOneShot(sndPowerUp, 0.5f);
 }
 

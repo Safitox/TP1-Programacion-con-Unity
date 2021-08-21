@@ -28,10 +28,10 @@ public class FPSJugadorController : MonoBehaviour
     [SerializeField] GameObject Arma;
     public bool blSaltoHabilitado = true;
     bool blArmaActiva = true;
-    [SerializeField] AudioClip sndOuch;
     Vector3 centroRef = new Vector3(0.5f, 0.5f, 0f);
     bool blMisil;
-    bool blTutorial;
+    bool blTutorial=true;
+    [SerializeField] AudioClip sndOuch;
 
 
     private void Start()
@@ -53,6 +53,7 @@ public class FPSJugadorController : MonoBehaviour
         GameManager.Instance.OnCambioEstadoTutorial += EstadoTutorial;
         GameManager.Instance.onRestart += killMe;
         GameManager.Instance.OnPlusDMG += PlusDMG;
+        GameManager.Instance.onLevelChange += Respawn;
 
     }
 
@@ -61,13 +62,29 @@ public class FPSJugadorController : MonoBehaviour
         GameManager.Instance.OnCambioEstadoTutorial -= EstadoTutorial;
         GameManager.Instance.onRestart -= killMe;
         GameManager.Instance.OnPlusDMG -= PlusDMG;
+        GameManager.Instance.onLevelChange -= Respawn;
+
     }
 
+    void Respawn()
+    {
+        ultimaBala = 0;
+        ultimoMisil = 0;
+
+    }
     void EstadoTutorial(bool OnOff)
     {
         blTutorial = OnOff;
         timerSalto = 0;
+        if (OnOff)
+        {
+            balasjugador.Clear();
+            misilesJugador.Clear();
+        }
+        blArmaActiva = !OnOff;
+
     }
+
 
     void Update()
     {
@@ -92,16 +109,12 @@ public class FPSJugadorController : MonoBehaviour
         }
         if (Input.GetKeyUp(KeyCode.KeypadPlus) || Input.GetKeyUp(KeyCode.Plus))
             GameManager.Instance.PASEDENIVEL();
-        if (Input.GetKeyUp(KeyCode.E))
+        if (Input.GetMouseButton(1))
         {
             if (!blTutorial)
             {
                 blMisil = true;
                 Disparar();
-            }
-            else
-            {
-                GameManager.Instance.IniciarPartida();
             }
         }
         transform.Translate(velocity.x, 0, velocity.y);
@@ -110,7 +123,9 @@ public class FPSJugadorController : MonoBehaviour
 
     void Disparar()
     {
-        if (blArmaActiva && !blMisil)
+        if (blTutorial)
+            return;
+        if (blArmaActiva && !blMisil )
         {
             if (Time.timeSinceLevelLoad - ultimaBala >= frecuenciaBalas)
             {
@@ -166,6 +181,7 @@ public class FPSJugadorController : MonoBehaviour
         else if (anclajeCabeza.GetChild(0)!=null && !Arma.activeInHierarchy)
         {
             GameObject cabeza = anclajeCabeza.GetChild(0).gameObject;
+            cabeza.GetComponent<MeshCollider>().enabled = true;
             cabeza.GetComponent<Rigidbody>().isKinematic = false;
             cabeza.transform.SetParent(null);
             cabeza.GetComponent<Rigidbody>().AddForce((cam.transform.forward).normalized * 500);
@@ -212,6 +228,7 @@ public class FPSJugadorController : MonoBehaviour
             cab.position = anclajeCabeza.position;
             cab.rotation = anclajeCabeza.rotation;
             cab.GetComponent<Rigidbody>().isKinematic = true;
+            cab.GetComponent<MeshCollider>().enabled = false;
             Arma.SetActive(false);
             blArmaActiva = false;
         }

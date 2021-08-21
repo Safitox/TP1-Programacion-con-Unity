@@ -11,6 +11,7 @@ public class SceneManager4 : MonoBehaviour
     List<GameObject> robots3 = new List<GameObject>();
     List<GameObject> poolCajas = new List<GameObject>();
     [SerializeField] List<Transform> spawners = new List<Transform>();
+    [SerializeField] GameObject goTutorial;
 
     [SerializeField]
     Transform spawnJugador;
@@ -40,7 +41,7 @@ public class SceneManager4 : MonoBehaviour
             SM = this;
         jugador = GameManager.Instance.jugador;
         poolBalas = GameObject.Find("poolBalasJugador").transform;
-        SpawnearUno();
+
     }
 
     private void OnEnable()
@@ -63,22 +64,26 @@ public class SceneManager4 : MonoBehaviour
 
     void EstadoTutorial(bool OnOff)
     {
-
+        goTutorial.SetActive(OnOff);
+        if (!OnOff)
+        {
+            SpawnearUno();
+            Respawn();
+        }
     }
 
     void EstadoGame(bool OnOff)
     {
         playing = OnOff;
+        
+            
     }
 
     public void SpawnearUno()
     {
-      //  if (playing)
-        {
             if (MechaShrekOn)
                 ActivarNuevoRobot();
             ActivarNuevoRobot3();
-        }
         Invoke("SpawnearUno", Random.Range(7f, 12f));
     }
 
@@ -178,14 +183,9 @@ public class SceneManager4 : MonoBehaviour
     public void Respawn()
     {
         jugador.position = spawnJugador.position;
-        GameManager.Instance.stockMisiles = 3;
+        if (!GameManager.Instance.blTutorial)
+            GameManager.Instance.stockMisiles = 3;
 
-    }
-
-    public void Victorioso()
-    {
-        GameManager.Instance.VidaJugador = 50000;
-        Time.timeScale = 0;
     }
 
 

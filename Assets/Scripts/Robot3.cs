@@ -21,18 +21,11 @@ public class Robot3 : MonoBehaviour
     [SerializeField] float minimaDistanciaDejugador=4f;
     [SerializeField] MeshRenderer cara;
     SceneManager1 SCMAN;
-    [SerializeField] Transform canon1;
-    [SerializeField] Transform canon2;
-    [SerializeField] AudioClip sndImpacto;
     public bool blDisparar = false;
-    private Animator anim;
     [SerializeField] float chancePowerUp = 0f;
 
     [Header("Audio")]
-    [SerializeField]
-    AudioClip sndDisparo;
-    [SerializeField]
-    AudioClip[] sndActivar;
+    [SerializeField] AudioClip sndImpacto;
     private AudioSource _audio;
     private float baseSpeed = 0f;
 

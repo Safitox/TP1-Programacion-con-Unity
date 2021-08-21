@@ -21,12 +21,16 @@ public class scrDJ : MonoBehaviour
     {
         GameManager.Instance.OnCambioEstadoTutorial += EstadoTutorial;
         GameManager.Instance.OnCambioEstadoGame += EstadoGame;
+        GameManager.Instance.onWin += Victoria;
+        GameManager.Instance.onDefeat += Defeat;
     }
 
     private void OnDisable()
     {
         GameManager.Instance.OnCambioEstadoTutorial -= EstadoTutorial;
         GameManager.Instance.OnCambioEstadoGame -= EstadoGame;
+        GameManager.Instance.onWin -= Victoria;
+        GameManager.Instance.onDefeat -= Defeat;
     }
 
 
@@ -45,5 +49,19 @@ public class scrDJ : MonoBehaviour
             _audio.clip = Musica;
             _audio.Play();
         }   
+    }
+
+    void Victoria()
+    {
+        _audio.clip = GameManager.Instance.MusicaVictoria;
+        _audio.loop = false;
+        _audio.Play();
+    }
+
+    void Defeat()
+    {
+        _audio.clip = GameManager.Instance.MusicaGameOver;
+        _audio.loop = false;
+        _audio.Play();
     }
 }

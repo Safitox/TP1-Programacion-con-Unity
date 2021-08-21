@@ -19,6 +19,7 @@ public class PowerUp : MonoBehaviour
                 GameManager.Instance.AddVida(addVida);
             else if (dmgBoost != 0)
                 GameManager.Instance.AddPlusDmg();
+            GameManager.Instance.RecogerPowerUp();
             Destroy(this.gameObject);
         }
     }

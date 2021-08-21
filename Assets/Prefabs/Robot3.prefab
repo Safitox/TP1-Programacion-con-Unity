@@ -255,13 +255,9 @@ MonoBehaviour:
   blmovible: 0
   minimaDistanciaDejugador: 4
   cara: {fileID: 0}
-  canon1: {fileID: 0}
-  canon2: {fileID: 0}
-  sndImpacto: {fileID: 0}
   blDisparar: 0
   chancePowerUp: 0
-  sndDisparo: {fileID: 0}
-  sndActivar: []
+  sndImpacto: {fileID: 8300000, guid: ad954bc140dc41d4ba9488f014fe7e39, type: 3}
 --- !u!195 &222413405
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -623,8 +619,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1309327499222004778}
-  - component: {fileID: 1558547910243275740}
   - component: {fileID: 5069681326352917134}
+  - component: {fileID: 4247124375528858798}
   m_Layer: 0
   m_Name: CabezaRobot1
   m_TagString: Untagged
@@ -649,20 +645,6 @@ Transform:
   m_Father: {fileID: 1558547910021028069}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!64 &1558547910243275740
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1828596418050748048}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -5495902117074765545, guid: 59fca762f34a0e248bc3e0061e766d45, type: 3}
 --- !u!114 &5069681326352917134
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -676,6 +658,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Multiplicador: 2
+--- !u!65 &4247124375528858798
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1828596418050748048}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.2650335, y: 1.9285033, z: 0.9577105}
+  m_Center: {x: -0.018285712, y: 0.96012, z: -0.5771021}
 --- !u!1 &2174518015221588389
 GameObject:
   m_ObjectHideFlags: 0
@@ -687,6 +682,7 @@ GameObject:
   - component: {fileID: 2763535608188645199}
   - component: {fileID: 6892580485489711569}
   - component: {fileID: 3071824953612109070}
+  - component: {fileID: 6170967163370329266}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -756,6 +752,20 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &6170967163370329266
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2174518015221588389}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5495902117074765545, guid: 59fca762f34a0e248bc3e0061e766d45, type: 3}
 --- !u!1 &2174518016301236268
 GameObject:
   m_ObjectHideFlags: 0
