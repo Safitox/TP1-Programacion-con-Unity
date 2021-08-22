@@ -6,6 +6,7 @@ public class scrObjeto2D : MonoBehaviour
 {
     Transform jugador;
     private bool visible = false;
+    [SerializeField] bool blSiempreVisible = false;
     void Start()
     {
         jugador = GameManager.Instance.jugador;
@@ -25,6 +26,8 @@ public class scrObjeto2D : MonoBehaviour
 
     void Visibilidad(bool estado)
     {
+        if (blSiempreVisible)
+            return;
         if (visible != estado)
         {
             try

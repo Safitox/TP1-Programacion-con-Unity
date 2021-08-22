@@ -12,7 +12,6 @@ public class FPSJugadorController : MonoBehaviour
     public Vector2 velocity;
     [SerializeField] float velocidadBala = 1;
     [SerializeField] float velocidadMisil = 1;
-    float timerSalto =0;
     public float fuerzaSalto = 2f;
     Rigidbody rb;
     List<GameObject> balasjugador = new List<GameObject>();
@@ -75,7 +74,6 @@ public class FPSJugadorController : MonoBehaviour
     void EstadoTutorial(bool OnOff)
     {
         blTutorial = OnOff;
-        timerSalto = 0;
         if (OnOff)
         {
             balasjugador.Clear();
@@ -90,10 +88,9 @@ public class FPSJugadorController : MonoBehaviour
     {
         velocity.y = Input.GetAxis("Vertical") * speed * Time.deltaTime;
         velocity.x = Input.GetAxis("Horizontal") * speed * Time.deltaTime;
-        if (Input.GetKeyDown(KeyCode.Space) && (Time.timeSinceLevelLoad - timerSalto) > 1.5f)
+        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded())
         {
             rb.AddForce(Vector3.up * 100 * fuerzaSalto);
-            timerSalto = Time.timeSinceLevelLoad;
         }
         if (Input.GetKeyDown(KeyCode.LeftShift))
             speed = 8;
@@ -107,7 +104,7 @@ public class FPSJugadorController : MonoBehaviour
                 Disparar();
             }
         }
-        if (Input.GetKeyUp(KeyCode.KeypadPlus) || Input.GetKeyUp(KeyCode.Plus))
+        if (Input.GetKeyUp(KeyCode.KeypadPlus) || Input.GetKeyUp(KeyCode.Plus)|| Input.GetKeyUp(KeyCode.O) )
             GameManager.Instance.PASEDENIVEL();
         if (Input.GetMouseButton(1))
         {
@@ -120,8 +117,11 @@ public class FPSJugadorController : MonoBehaviour
         transform.Translate(velocity.x, 0, velocity.y);
     }
 
-
-    void Disparar()
+    bool IsGrounded()
+    {
+        return Physics.Raycast(transform.position, -Vector3.up, 2f);
+    }
+void Disparar()
     {
         if (blTutorial)
             return;

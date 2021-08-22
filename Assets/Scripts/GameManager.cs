@@ -32,20 +32,13 @@ public class GameManager : Singleton<GameManager>
     List<GameObject> Explosiones = new List<GameObject>();
     [SerializeField]
     GameObject pf_Muerto;
-    [SerializeField]
-    GameObject pf_CajaMunicion;
-
 
     [Header("Referencias")]
     public Transform jugador;
     private PowerUpDispenser _PowerUpDispenser;
 
-    [Header("UI")]
-    [SerializeField] GameObject canvasJuego;
-
     [Header("Sonidos")]
     [SerializeField] AudioClip sndJugadorFesteja;
-    [SerializeField] AudioClip sndJugadorMuyDañado;
     [SerializeField] AudioClip sndJugadorMuere;
     public AudioClip MusicaTutorial;
     public AudioClip MusicaVictoria;
@@ -85,8 +78,7 @@ public class GameManager : Singleton<GameManager>
         {
             if (_blTutorial == value) return;
             _blTutorial = value;
-            if (OnCambioEstadoTutorial != null)
-                OnCambioEstadoTutorial(_blTutorial);
+            OnCambioEstadoTutorial?.Invoke(_blTutorial);
         }
     }
     public bool blPlusDMG
@@ -111,8 +103,7 @@ public class GameManager : Singleton<GameManager>
         {
             if (_blGameOn == value) return;
             _blGameOn = value;
-            if (OnCambioEstadoGame != null)
-                OnCambioEstadoGame(_blGameOn);
+            OnCambioEstadoGame?.Invoke(_blGameOn);
         }
     }
     public int Vidas
@@ -125,8 +116,7 @@ public class GameManager : Singleton<GameManager>
         {
             if (_Vidas == value) return;
             _Vidas = value;
-            if (OnCambioVidas != null)
-                OnCambioVidas(_Vidas);
+            OnCambioVidas?.Invoke(_Vidas);
         }
     }
     public int stockMisiles
@@ -141,8 +131,7 @@ public class GameManager : Singleton<GameManager>
             _stockMisiles = value;
             if (_stockMisiles > 20)
                 _stockMisiles = 20;
-            if (OnCambioMisiles != null)
-                OnCambioMisiles(_stockMisiles);
+            OnCambioMisiles?.Invoke(_stockMisiles);
         }
     }
     public float VidaJugador
@@ -155,8 +144,7 @@ public class GameManager : Singleton<GameManager>
         {
             if (_VidaJugador == value) return;
             _VidaJugador = value;
-            if (OnCambioVidaJugador != null)
-                OnCambioVidaJugador(_VidaJugador / VidaInicial);
+            OnCambioVidaJugador?.Invoke(_VidaJugador / VidaInicial);
         }
     }
 
@@ -291,6 +279,8 @@ public class GameManager : Singleton<GameManager>
 
     public void PASEDENIVEL(int overrider=0)
     {
+        if (EscenaActual > Escenas.Length - 1)
+            return;
         blTutorial = true;
         CursorLock(true);
         blGameOn = false;
