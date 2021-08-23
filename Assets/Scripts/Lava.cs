@@ -19,20 +19,19 @@ public class Lava : MonoBehaviour
             transform.position += velAscenso * Time.deltaTime   ;
         
     }
+   
 
-    private void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider col)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (col.gameObject.CompareTag("Player"))
         {
             GameObject.Find("GameManager").GetComponent<GameManager>().JugadorTocado(1000);
 
         }
-    }
 
-    public void Reiniciar()
-    {
-        transform.position = posInicial;
 
     }
+
+    public void Reiniciar()=>transform.position = posInicial;
 
 }
